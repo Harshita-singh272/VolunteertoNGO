@@ -1,0 +1,97 @@
+
+.login_card {
+  border: 7px solid rgb(88, 117, 86);
+  box-shadow: 5px 10px 20px rgb(88, 117, 86);
+  margin:15px;
+  padding: 25px 25px;
+  border-radius: 50px;
+  color:black;
+  min-height: 700px;
+  max-width:max-content;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.login_card h1 {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+  font-size: 55px;
+  
+}
+
+.login_content {
+  padding: 25px;
+  display :flex;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+  align-items: center;
+  margin:0px;
+}
+
+
+.login_content img {
+  width: 500px;
+  height:350px;
+  border-radius:20px;
+}
+
+.login_block {
+  align-items: right;
+  padding: 0px 30px;
+  padding-top: 40px;
+  background-color:rgba(0, 0, 0, 0.115) ;
+  font-size: 30px;
+  border-radius:20px;
+  height: 100%;
+  font-weight: 100;
+  box-shadow: 3px 8px 20px rgb(23, 21, 21);
+}
+
+.login_content h2 {
+  text-align:center;
+  font-size: 37px;
+}
+
+.login_input {
+  align-items:self-start;
+  margin:10px 0;
+  padding: 20px;
+  color: black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.login_input label {
+  font-size: 22px;
+}
+
+.login_input input {
+  background-color: rgba(221, 219, 191, 0.659);
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 5px;
+  width: 400px;
+}
+
+.login_input select {
+  background-color: rgba(221, 219, 191, 0.659);
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 5px;
+  width: 400px;
+  color:rgb(132, 128, 128)
+}
+
+.login_input button{
+  padding: 10px 30px;
+  margin-top: -10px; 
+  font-size: 20px;
+  border-radius: 10px;
+  align-self: center;
+  color: rgb(210, 234, 208);
+  background-color: rgba(87, 95, 87, 0.914);
+  box-shadow: 2px 3px 10px rgb(76, 74, 74);
+}

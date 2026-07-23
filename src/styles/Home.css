@@ -1,0 +1,300 @@
+/* =========================
+   GENERAL PAGE
+   ========================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(239, 235, 215);
+
+  color: rgb(40, 45, 39);
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+  width:100%;
+}
+
+
+/* =========================
+   HERO
+   ========================= */
+
+.hero {
+  min-height: 620px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 60px 8%;
+  box-sizing: border-box;
+
+  background-color: rgb(247, 243, 229);
+
+  gap: 60px;
+}
+
+
+/* LEFT SIDE */
+
+.hero_text {
+  flex: 1;
+
+  max-width: 600px;
+}
+
+.hero_text h1 {
+  margin: 0 0 25px 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 55px;
+  line-height: 1.15;
+
+  color: rgb(54, 70, 52);
+}
+
+.hero_text p {
+  max-width: 520px;
+
+  font-size: 19px;
+  line-height: 1.7;
+
+  color: rgb(86, 86, 75);
+
+  margin-bottom: 30px;
+}
+
+
+/* GET STARTED */
+
+.hero_text button {
+  padding: 13px 30px;
+
+  border: none;
+  border-radius: 8px;
+
+  background-color: rgb(88, 117, 86);
+  color: white;
+
+  font-size: 17px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.15);
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.hero_text button:hover {
+  background-color: rgb(67, 91, 65);
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================
+   HERO IMAGE
+   ========================= */
+
+.hero_image {
+  flex: 1;
+
+  min-height: 450px;
+  max-width: 600px;
+
+  border-radius: 30px;
+
+  /*
+     When you have your image:
+
+     background-image: url("../assets/your-image.jpg");
+  */
+
+  background-size: cover;
+  background-position: center;
+
+  background-color: rgb(211, 218, 190);
+
+  box-shadow: 8px 12px 25px rgba(54, 70, 52, 0.2);
+}
+
+
+/* =========================
+   COMMON SECTIONS
+   ========================= */
+
+.home_section {
+  min-height: 300px;
+
+  padding: 80px 20%;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  /* justify-content: left; */
+
+  text-align: left;
+}
+
+.home_section h2 {
+  margin: 0 0 15px;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 40px;
+  justify-content: center;
+
+  text-align: center;
+  color: rgb(54, 70, 52);
+}
+
+.home_section p {
+  max-width: 750px;
+
+  margin: 0 auto;
+
+  font-size: 20px;
+  line-height: 1.6;
+
+  color: rgb(82, 82, 72);
+}
+
+
+/* =========================
+   ALTERNATING BACKGROUNDS
+   ========================= */
+
+#about {
+  background-color: rgb(235, 230, 207);
+}
+
+#how-it-works {
+  background-color: rgb(247, 243, 229);
+}
+
+#volunteer {
+  background-color: rgb(220, 225, 202);
+}
+
+#ngo {
+  background-color: rgb(247, 243, 229);
+}
+
+
+/* =========================
+   AUTH SECTION
+   ========================= */
+
+.auth_section {
+  padding: 70px 5%;
+
+  display: flex;
+  justify-content: center;
+
+  background-color: rgb(218, 223, 198);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media (max-width: 950px) {
+
+  .hero {
+    min-height: auto;
+
+    flex-direction: column;
+
+    text-align: center;
+
+    padding: 70px 6%;
+  }
+
+  .hero_text {
+    max-width: 700px;
+  }
+
+  .hero_text h1 {
+    font-size: 45px;
+  }
+
+  .hero_text p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero_image {
+    width: 100%;
+    max-width: 700px;
+    min-height: 400px;
+  }
+
+  .home_section {
+    padding: 70px 10%;
+  }
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+
+  .hero {
+    padding: 50px 25px;
+
+    gap: 40px;
+  }
+
+  .hero_text h1 {
+    font-size: 36px;
+  }
+
+  .hero_text p {
+    font-size: 16px;
+  }
+
+  .hero_text button {
+    padding: 11px 24px;
+    font-size: 15px;
+  }
+
+  .hero_image {
+    min-height: 280px;
+
+    border-radius: 20px;
+  }
+
+  .home_section {
+    min-height: 250px;
+
+    padding: 60px 30px;
+  }
+
+  .home_section h2 {
+    font-size: 32px;
+  }
+
+  .home_section p {
+    font-size: 16px;
+  }
+
+  .auth_section {
+    padding: 40px 15px;
+  }
+}
