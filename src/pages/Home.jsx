@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../components/nav.jsx";
 import "../styles/Home.css";
-import about_section from "../components/about.jsx"
 import {Star} from 'lucide-react';
 import {StepForward} from 'lucide-react';
 import {CircleStar} from 'lucide-react';
