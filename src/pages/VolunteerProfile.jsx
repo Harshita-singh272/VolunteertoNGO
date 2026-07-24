@@ -452,7 +452,7 @@ const handleSubmit = (event) => {
           </div>
 
           <button
-            className="profile_submit"
+            className="volunteer_profile_submit"
             type="submit"
           >
             Complete Profile

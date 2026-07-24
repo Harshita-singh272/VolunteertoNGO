@@ -1,0 +1,51 @@
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-bottom: 22px;
+}
+
+
+.field label {
+  font-size: 19px;
+  font-weight: 600;
+
+  color: rgb(50, 60, 48);
+}
+
+.field textarea,
+.field input{
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid rgb(170, 175, 150);
+  border-radius: 8px;
+
+  background-color: rgb(252, 249, 237);
+
+  font-family: inherit;
+  font-size: 16px;
+
+  outline: none;
+}
+
+.field textarea:focus,
+.field input:focus {
+  border-color: rgb(88, 117, 86);
+
+  box-shadow: 0 0 0 2px
+    rgba(88, 117, 86, 0.12);
+}
+
+.optional {
+  font-size: 14px;
+  font-weight: normal;
+
+  color: rgb(110, 110, 95);
+}
