@@ -8,7 +8,7 @@ import NgoProfile from './pages/NgoProfile.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     {/* <App /> */}
-    <VolunteerProfile />
+    {/* <VolunteerProfile /> */}
     <NgoProfile />
   </StrictMode>
 );

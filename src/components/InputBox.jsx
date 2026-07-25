@@ -1,7 +1,7 @@
 import React from 'react'
-import "../styles/TextBox.css"
+import "../styles/InputBox.css"
 
-const TextBox = (props) => {
+const InputBox = (props) => {
   return (
     <div className ="field">
         <label htmlFor={props.Kind}>
@@ -16,7 +16,7 @@ const TextBox = (props) => {
             name={props.Kind}
             type={props.Type || "text"}
             value={props.Statename}
-             onChange={props.handleChange}
+            onChange={props.handleChange}
             placeholder={props.Place}
             required={props.required}
         />
@@ -24,4 +24,4 @@ const TextBox = (props) => {
   )
 }
 
-export default TextBox
+export default InputBox

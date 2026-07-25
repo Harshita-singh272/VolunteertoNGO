@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/VolunteerProfile.css";
+import { CAUSES } from "../constants/causes.js";
 
 const VolunteerProfile = () => {
 
@@ -18,19 +19,6 @@ const VolunteerProfile = () => {
     consent: false,
   });
 
-
-  const interests = [
-    "Education",
-    "Environment",
-    "Healthcare",
-    "Animal Welfare",
-    "Child Welfare",
-    "Elderly Care",
-    "Community Service",
-    "Women Empowerment",
-    "Disaster Relief",
-    "Technology"
-  ];
 
 // Handles normal inputs, textarea, select,
 // radio buttons, and the consent checkbox
@@ -326,7 +314,7 @@ const handleSubmit = (event) => {
 
             <div className="interest_grid">
 
-              {interests.map((interest) => (
+              {CAUSES.map((interest) => (
 
                 <label
                   className="interest_option"

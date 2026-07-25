@@ -1,28 +1,26 @@
 
-.field {
+.textarea_field {
   display: flex;
   flex-direction: column;
 
   gap: 8px;
 
-  margin-bottom: 22px;
+  margin-bottom: 30px;
 }
 
-
-.field label {
+.textarea_field label {
   font-size: 19px;
   font-weight: 600;
 
   color: rgb(50, 60, 48);
 }
 
-.field textarea,
-.field input{
+.textarea_field textarea {
   width: 100%;
 
   box-sizing: border-box;
 
-  padding: 12px 14px;
+  padding: 14px;
 
   border: 1px solid rgb(170, 175, 150);
   border-radius: 8px;
@@ -32,15 +30,24 @@
   font-family: inherit;
   font-size: 16px;
 
+  line-height: 1.5;
+
+  resize: vertical;
+
   outline: none;
 }
 
-.field textarea:focus,
-.field input:focus {
+
+.textarea_field textarea:focus {
   border-color: rgb(88, 117, 86);
 
   box-shadow: 0 0 0 2px
     rgba(88, 117, 86, 0.12);
+}
+
+
+.textarea_field textarea::placeholder {
+  color: rgb(135, 135, 120);
 }
 
 .optional {

@@ -1,6 +1,9 @@
 import React, {useState} from "react";
 import "../styles/NgoProfile.css";
-import TextBox from "../components/TextBox.jsx"
+import InputBox from "../components/InputBox.jsx"
+import TextareaBox from "../components/TextareaBox.jsx"
+import { CAUSES } from "../constants/causes.js";
+
 const NgoProfile = () => {
 
     const [ngoData, setNgoData] = useState({
@@ -15,8 +18,7 @@ const NgoProfile = () => {
         foundedYear: "",
         organizationSize: "",
         logo: null,
-
-         mission: "",
+        mission: "",
         description: "",
         programs: "",
         volunteerHelp: "",
@@ -24,48 +26,30 @@ const NgoProfile = () => {
         causes: [],
     });
 
-    const causes = [
-        "Education",
-        "Environment",
-        "Healthcare",
-        "Animal Welfare",
-        "Child Welfare",
-        "Elderly Care",
-        "Community Development",
-        "Women Empowerment",
-        "Disaster Relief",
-        "Poverty Relief",
-        "Disability Support",
-        "Technology"
-    ];
+  
 
     const handleCauseChange = (event) => {
-    const { value, checked } = event.target;
+        const { value, checked } = event.target;
 
-    setNgoData((previousData) => {
+        setNgoData((previousData) => {
+            const updated = checked
+            ? [...previousData.causes, value]
+            : previousData.causes.filter((c) => c !== value);
+            return { ...previousData, causes: updated };
+        });
 
-        if (checked) {
-        return {
-            ...previousData,
-            causes: [
-            ...previousData.causes,
-            value
-            ],
+        if (checked) setCauseError("");
         };
-        }
-
-        return {
-        ...previousData,
-        causes: previousData.causes.filter(
-            (cause) => cause !== value
-        ),
-        };
-    });
-    };
 
     const [logoPreview , setLogoPreview] = useState(null)
 
     const [step, setStep] = useState(1);
+
+    const goBack = () => {
+        setStep(1);
+    };
+
+    const [causeError, setCauseError] = useState("");
 
     const handleChange = (event) => {
 
@@ -80,19 +64,24 @@ const NgoProfile = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-          if (step === 1) {
+        if (step === 1) {
                 setStep(2);
                 return;
-            }
+        }
+
+        if(ngoData.causes.length === 0){
+            setCauseError("Please select at  least one area of work.");
+            return;
+        }
+
+        setCauseError("");
+        
         console.log("Ngo Profile:" , ngoData);
 
         //Later:
         //POST /api/ngo/profile
     };
 
-    const goBack = () => {
-        setStep(1);
-    };
 
     const handleLogoChange = (event) => {
         const file = event.target.files[0];
@@ -131,24 +120,21 @@ const NgoProfile = () => {
           onSubmit={handleSubmit}
         >
 
-          {/* ORGANIZATION IDENTITY */}
           {step === 1 && (
          <>
 
             <div className="ngo_profile_section">
                 <h1>Step: 1</h1>
+                <p className="step_label">Step 1 of 2</p>
                 <h2>Organization Identity</h2>
-                <div className="ngo_profile_field">
-
-                    <TextBox 
+                
+                    <InputBox 
                     Kind = 'organizationName' 
                     Name = 'Organization Name' 
                     Statename = {ngoData.organizationName} 
                     Place = 'Enter your NGO name' 
                     handleChange={handleChange}
                     required/>
-
-                </div>
 
                 <div className="ngo_profile_field">
 
@@ -176,9 +162,7 @@ const NgoProfile = () => {
                     )}
                 </div>
 
-                <div className="ngo_profile_field">
-
-                    <TextBox 
+                    <InputBox 
                     Kind = 'contactPersonName' 
                     Name = 'Contact Person Name' 
                     Statename = {ngoData.contactPersonName} 
@@ -186,12 +170,7 @@ const NgoProfile = () => {
                     handleChange={handleChange}
                     required/>
                     
-                </div>
-
-
-                <div className="ngo_profile_field">
-
-                    <TextBox 
+                    <InputBox 
                     Kind = 'contactPersonRole' 
                     Name = ' Contact Person Role' 
                     Statename = {ngoData.contactPersonRole} 
@@ -199,10 +178,7 @@ const NgoProfile = () => {
                     handleChange={handleChange}
                     required/>
                   
-                </div>
-
-                <div className="ngo_profile_field">
-                       <TextBox 
+                    <InputBox 
                     Kind = 'contactEmail' 
                     Name = 'Contact Email' 
                     Type = 'email'
@@ -211,12 +187,7 @@ const NgoProfile = () => {
                     handleChange={handleChange}
                     required/>
                    
-                </div>
-
-
-                <div className="ngo_profile_field">
-
-                    <TextBox 
+                    <InputBox 
                     Kind = 'contactPhone' 
                     Name = 'Contact Phone Number' 
                     Type = 'tel'
@@ -225,11 +196,7 @@ const NgoProfile = () => {
                     handleChange={handleChange}
                     required/>
                    
-                </div>
-
-                <div className="ngo_profile_field">
-
-                    <TextBox 
+                    <InputBox 
                     Kind = 'location' 
                     Name = 'Location' 
                     Statename = {ngoData.location} 
@@ -237,11 +204,7 @@ const NgoProfile = () => {
                     handleChange={handleChange}
                     required/>
 
-                </div>
-
-                <div className="ngo_profile_field">
-
-                    <TextBox 
+                    <InputBox 
                     Kind = 'website' 
                     Name = 'Website' 
                     Type = "url"
@@ -250,12 +213,7 @@ const NgoProfile = () => {
                     handleChange={handleChange}
                     />
                   
-                </div>
-
-
-                <div className="ngo_profile_field">
-
-                    <TextBox 
+                    <InputBox 
                     Kind = 'socialLink' 
                     Name = 'Social Media' 
                     Type = 'url'
@@ -264,13 +222,9 @@ const NgoProfile = () => {
                     handleChange={handleChange}
                     />
 
-                </div>
-
                 <div className="ngo_profile_row">
 
-                    <div className="ngo_profile_field">
-
-                    <TextBox 
+                    <InputBox 
                         Kind = 'foundedYear' 
                         Name = 'Founded Year' 
                         Type = 'number'
@@ -278,9 +232,6 @@ const NgoProfile = () => {
                         Place = 'e.g. 2015' 
                         handleChange={handleChange}
                     />
-
-                    </div>
-
 
                     <div className="ngo_profile_field">
 
@@ -339,6 +290,7 @@ const NgoProfile = () => {
 
             <div className="step_two_heading">
                 <h1>Step: 2</h1>
+                <p className="step_label">Step 2 of 2</p>
                 <h2>Mission & Work</h2>
 
                 <p>
@@ -347,95 +299,54 @@ const NgoProfile = () => {
                 </p>
             </div>
 
-            <div className="ngo_textarea_field">
-
-                <label htmlFor="mission">
-                Mission & Goals
-                </label>
-
-                <textarea
-                id="mission"
-                name="mission"
-                value={ngoData.mission}
-                onChange={handleChange}
-                placeholder="What is your organization's mission? What change are you working toward?"
-                rows="5"
+                <TextareaBox
+                Kind = 'mission'
+                Name = 'Mission & Goals'
+                Statename = {ngoData.mission}
+                handleChange = {handleChange}
+                Place = "What is your organization's mission? What change are you working toward?"
+                Count = '5'
+                required
+                />
+            
+                <TextareaBox
+                Kind = 'description'
+                Name = 'About Your Organization'
+                Statename = {ngoData.description}
+                handleChange = {handleChange}
+                Place = "Tell volunteers about your organization, its background, the communities you work with, and the kind of work you do."
+                Count = '6'
                 required
                 />
 
-            </div>
-
-            <div className="ngo_textarea_field">
-
-                <label htmlFor="description">
-                About Your Organization
-                </label>
-
-                <textarea
-                id="description"
-                name="description"
-                value={ngoData.description}
-                onChange={handleChange}
-                placeholder="Tell volunteers about your organization, its background, the communities you work with, and the kind of work you do."
-                rows="6"
+                <TextareaBox
+                Kind = 'programs'
+                Name = 'Programs & Activities'
+                Statename = {ngoData.programs}
+                handleChange = {handleChange}
+                Place = "Describe your regular programs, projects, events, drives, or other activities."
+                Count = '5'
                 required
                 />
 
-            </div>
-
-            <div className="ngo_textarea_field">
-
-                <label htmlFor="programs">
-                Programs & Activities
-                </label>
-
-                <textarea
-                id="programs"
-                name="programs"
-                value={ngoData.programs}
-                onChange={handleChange}
-                placeholder="Describe your regular programs, projects, events, drives, or other activities."
-                rows="5"
+                <TextareaBox
+                Kind = 'volunteerHelp'
+                Name = 'How Can Volunteers Help?'
+                Statename = {ngoData.volunteerHelp}
+                handleChange = {handleChange}
+                Place = "For example: Volunteers can participate in teaching sessions, distribution drives, community visits, event support, fundraising, technical work, or other activities."
+                Count = '6'
                 required
                 />
 
-            </div>
-
-            <div className="ngo_textarea_field">
-
-                <label htmlFor="volunteerHelp">
-                How Can Volunteers Help?
-                </label>
-
-                <textarea
-                id="volunteerHelp"
-                name="volunteerHelp"
-                value={ngoData.volunteerHelp}
-                onChange={handleChange}
-                placeholder="For example: Volunteers can participate in teaching sessions, distribution drives, community visits, event support, fundraising, technical work, or other activities."
-                rows="6"
-                required
+                <TextareaBox
+                Kind = 'currentNeeds'
+                Name = 'Current Needs'
+                Statename = {ngoData.currentNeeds}
+                handleChange = {handleChange}
+                Place = "Is there anything your organization currently needs help with? For example: volunteers for an upcoming drive, book donations, event support, etc."
+                Count = '5'
                 />
-
-            </div>
-
-            <div className="ngo_textarea_field">
-
-                <label htmlFor="currentNeeds">
-                Current Needs
-                <span className="optional"> (Optional)</span>
-                </label>
-
-                <textarea
-                id="currentNeeds"
-                name="currentNeeds"
-                value={ngoData.currentNeeds}
-                onChange={handleChange}
-                placeholder="Is there anything your organization currently needs help with? For example: volunteers for an upcoming drive, book donations, event support, etc."
-                rows="5"
-                />
-
-            </div>
 
             <div className="ngo_causes_section">
 
@@ -447,7 +358,7 @@ const NgoProfile = () => {
 
                 <div className="ngo_causes_grid">
 
-                    {causes.map((cause) => (
+                   {CAUSES.map((cause) => (
 
                         <label
                         className="ngo_cause_option"
@@ -458,7 +369,6 @@ const NgoProfile = () => {
                             value={cause}
                             checked={ngoData.causes.includes(cause)}
                             onChange={handleCauseChange}
-                            required
                         />
 
                         <span>{cause}</span>
@@ -467,6 +377,14 @@ const NgoProfile = () => {
                     ))}
 
                     </div>
+
+                    {causeError && (
+                        <div className = "cause_error">
+                        <p >
+                            {causeError}
+                        </p>
+                        </div>
+                    )}
 
             </div>
 
