@@ -163,7 +163,7 @@
   color: rgb(88, 117, 86);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 6px;
+  margin: 10px 0px;
 }
 
 /* =========================
@@ -177,7 +177,7 @@
 
 
 .step_two_heading h2 {
-    margin-top: 20px;;
+  margin-top: 20px;;
   margin-bottom: 8px;
 }
 

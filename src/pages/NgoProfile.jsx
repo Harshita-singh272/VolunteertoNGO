@@ -3,7 +3,8 @@ import "../styles/NgoProfile.css";
 import InputBox from "../components/InputBox.jsx"
 import TextareaBox from "../components/TextareaBox.jsx"
 import { CAUSES } from "../constants/causes.js";
-
+import ngoContactFields from "../constants/ngoContactFields.js";
+import ngoTextareaFields from "../constants/ngoTextareaFields.js"
 const NgoProfile = () => {
 
     const [ngoData, setNgoData] = useState({
@@ -162,65 +163,18 @@ const NgoProfile = () => {
                     )}
                 </div>
 
-                    <InputBox 
-                    Kind = 'contactPersonName' 
-                    Name = 'Contact Person Name' 
-                    Statename = {ngoData.contactPersonName} 
-                    Place = 'e.g. Priya Sharma' 
-                    handleChange={handleChange}
-                    required/>
-                    
-                    <InputBox 
-                    Kind = 'contactPersonRole' 
-                    Name = ' Contact Person Role' 
-                    Statename = {ngoData.contactPersonRole} 
-                    Place = 'e.g. Volunteer Coordinator' 
-                    handleChange={handleChange}
-                    required/>
-                  
-                    <InputBox 
-                    Kind = 'contactEmail' 
-                    Name = 'Contact Email' 
-                    Type = 'email'
-                    Statename = {ngoData.contactEmail} 
-                    Place = 'contact@organization.org' 
-                    handleChange={handleChange}
-                    required/>
-                   
-                    <InputBox 
-                    Kind = 'contactPhone' 
-                    Name = 'Contact Phone Number' 
-                    Type = 'tel'
-                    Statename = {ngoData.contactPhone} 
-                    Place = '(+91) | Enter Contact Number' 
-                    handleChange={handleChange}
-                    required/>
-                   
-                    <InputBox 
-                    Kind = 'location' 
-                    Name = 'Location' 
-                    Statename = {ngoData.location} 
-                    Place = 'City, State' 
-                    handleChange={handleChange}
-                    required/>
-
-                    <InputBox 
-                    Kind = 'website' 
-                    Name = 'Website' 
-                    Type = "url"
-                    Statename = {ngoData.website} 
-                    Place = 'https://yourorganization.org' 
-                    handleChange={handleChange}
+                    {ngoContactFields.map((field) => (
+                    <InputBox
+                        key={field.Kind}
+                        Kind={field.Kind}
+                        Name={field.Name}
+                        Type={field.Type}
+                        Statename={ngoData[field.Kind]}
+                        Place={field.Place}
+                        handleChange={handleChange}
+                        {...(field.required && { required: true })}
                     />
-                  
-                    <InputBox 
-                    Kind = 'socialLink' 
-                    Name = 'Social Media' 
-                    Type = 'url'
-                    Statename = {ngoData.socialLink} 
-                    Place = 'Instagram, LinkedIn, Facebook, etc.' 
-                    handleChange={handleChange}
-                    />
+                    ))}
 
                 <div className="ngo_profile_row">
 
@@ -298,7 +252,7 @@ const NgoProfile = () => {
                 does, who you support, and how they can contribute.
                 </p>
             </div>
-
+{/* 
                 <TextareaBox
                 Kind = 'mission'
                 Name = 'Mission & Goals'
@@ -346,7 +300,19 @@ const NgoProfile = () => {
                 handleChange = {handleChange}
                 Place = "Is there anything your organization currently needs help with? For example: volunteers for an upcoming drive, book donations, event support, etc."
                 Count = '5'
+                /> */}
+                {ngoTextareaFields.map((field) => (
+                <TextareaBox
+                    key={field.Kind}
+                    Kind={field.Kind}
+                    Name={field.Name}
+                    Statename={ngoData[field.Kind]}
+                    handleChange={handleChange}
+                    Place={field.Place}
+                    Count={field.Count}
+                    {...(field.required && { required: true })}
                 />
+                ))}
 
             <div className="ngo_causes_section">
 
