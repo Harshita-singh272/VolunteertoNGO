@@ -1,0 +1,17 @@
+
+.dashboard_greeting {
+  margin-bottom: 35px;
+}
+
+.dashboard_greeting h1 {
+  margin: 0;
+  font-size: 42px;
+  font-family: Georgia, "Times New Roman", serif;
+  color: rgb(44, 72, 45);
+}
+
+.dashboard_greeting p {
+  margin-top: 10px;
+  font-size: 18px;
+  color: rgb(92, 92, 80);
+}

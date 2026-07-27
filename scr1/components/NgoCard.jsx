@@ -46,7 +46,7 @@ const NgoCard = (props) => {
       <div className="ngo_card_bottom">
 
         <p className="ngo_distance">
-          📍 {props.distance}
+          📍 {props.distance} km away
         </p>
 
         <button

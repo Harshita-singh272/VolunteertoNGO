@@ -1,0 +1,273 @@
+.volunteer_sidebar {
+  width: 245px;
+  min-height: 100vh;
+
+  box-sizing: border-box;
+
+  padding: 20px 16px;
+
+  background-color: #b9cfa4ab;
+
+  border-right: 1px solid rgba(44, 72, 45, 0.15);
+
+  display: flex;
+  flex-direction: column;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.sidebar_brand {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 8px;
+
+  margin-bottom: 30px;
+}
+
+
+.sidebar_brand_logo {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background-color: #e8eed8;
+
+  font-size: 24px;
+}
+
+
+.sidebar_brand h2 {
+  margin: 0;
+
+  font-size: 17px;
+
+  color: #1f3022;
+}
+
+
+.sidebar_brand p {
+  margin: 3px 0 0;
+
+  font-size: 11px;
+
+  color: #687068;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.sidebar_navigation {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+
+/* NORMAL LINK */
+
+.sidebar_link {
+  width: 100%;
+
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 10px 12px;
+
+  box-sizing: border-box;
+
+  border: none;
+  border-radius: 8px;
+
+  background-color: transparent;
+
+  color: #29332b;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+
+.sidebar_link:hover {
+  background-color: #f0f3e5;
+}
+
+
+/* ACTIVE DASHBOARD */
+
+.sidebar_active {
+  background-color: #e6ecd5;
+
+  color: #24552e;
+
+  font-weight: 600;
+}
+
+
+/* =========================
+   DISCOVER
+========================= */
+
+.sidebar_discover {
+  justify-content: space-between;
+}
+
+
+.sidebar_link_left {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+}
+
+
+/* =========================
+   SUBMENU
+========================= */
+
+.sidebar_submenu {
+  margin: 0 0 8px 21px;
+
+  padding-left: 17px;
+
+  border-left: 1px solid #d7dbd1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+
+.sidebar_submenu_link {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 7px 5px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #3e473f;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+
+.sidebar_submenu_link:hover {
+  color: #24552e;
+}
+
+
+/* =========================
+   NOTIFICATION BADGE
+========================= */
+
+.notification_badge {
+  margin-left: auto;
+
+  min-width: 20px;
+  height: 20px;
+
+  padding: 0 5px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background-color: #2f7538;
+
+  color: white;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+.sidebar_divider {
+  width: 100%;
+
+  margin: 12px 0;
+
+  border: none;
+  border-top: 1px solid #e1e2dc;
+}
+
+
+/* =========================
+   BOTTOM / LOGOUT
+========================= */
+
+.sidebar_bottom {
+  margin-top: auto;
+}
+
+
+.sidebar_logout {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 10px 12px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #343a35;
+
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+
+.sidebar_logout:hover {
+  background-color: #f2eee8;
+}
