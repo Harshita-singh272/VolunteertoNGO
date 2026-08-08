@@ -10,19 +10,25 @@
 //   <StrictMode>
 //     {/* <App /> */}
 //     {/* <VolunteerProfile /> */}
-//     {/* <NgoProfile /> */}
-//     <VolunteerDashboard />
+//     <NgoProfile />
+//     {/* <VolunteerDashboard /> */}
    
 //   </StrictMode>
 // );
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import {BrowserRouter,Routes,Route} from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
 
 import "./index.css";
 
 import VolunteerDashboard from "../scr1/VolunteerDashboard.jsx";
-import NearbyNgos from "../scr1/pages/NearbyNgos.jsx";
+import NearbyNgoPage from "../scr1/pages/NearbyNgoPage.jsx";
+import BrowseAllNgos from "../scr1/pages/BrowseAllNgos.jsx";
+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -31,14 +37,22 @@ createRoot(document.getElementById("root")).render(
 
       <Routes>
 
+        {/* Dashboard */}
         <Route
           path="/"
           element={<VolunteerDashboard />}
         />
 
+        {/* NGOs Near Me */}
         <Route
           path="/nearby-ngos"
-          element={<NearbyNgos />}
+          element={<NearbyNgoPage />}
+        />
+
+        {/* Browse All NGOs */}
+        <Route
+          path="/browse-ngos"
+          element={<BrowseAllNgos />}
         />
 
       </Routes>

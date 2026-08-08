@@ -110,8 +110,6 @@ const handleSubmit = (event) => {
           onSubmit={handleSubmit}
         >
 
-          {/* PERSONAL DETAILS */}
-
           <div className="profile_section">
 
             <h2>Personal Details</h2>
@@ -274,9 +272,6 @@ const handleSubmit = (event) => {
 
           </div>
 
-
-          {/* ABOUT */}
-
           <div className="profile_section">
 
             <h2>About You</h2>
@@ -300,9 +295,6 @@ const handleSubmit = (event) => {
             </div>
 
           </div>
-
-
-          {/* INTERESTS */}
 
           <div className="profile_section">
 
@@ -341,9 +333,6 @@ const handleSubmit = (event) => {
             </div>
 
           </div>
-
-
-          {/* SKILLS */}
 
           <div className="profile_section">
 

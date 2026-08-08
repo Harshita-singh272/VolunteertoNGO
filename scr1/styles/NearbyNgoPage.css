@@ -1,0 +1,15 @@
+.nearby_layout{
+    display: flex;
+    min-width: 100%;
+    min-height: 100vh;
+    background: #f7f3e5;
+}
+
+.nearby_content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;          /* Prevents overflow */
+    overflow-y: auto;
+    background: #f7f3e5;
+}

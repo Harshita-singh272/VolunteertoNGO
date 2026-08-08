@@ -1,96 +1,59 @@
 .volunteer_sidebar {
-  width: 245px;
+  width: 290px;
   min-height: 100vh;
-
   box-sizing: border-box;
-
-  padding: 20px 16px;
-
+  padding: 20px 16px; 
   background-color: #b9cfa4ab;
-
   border-right: 1px solid rgba(44, 72, 45, 0.15);
-
   display: flex;
   flex-direction: column;
-
   flex-shrink: 0;
 }
-
-
-/* =========================
-   BRAND
-========================= */
 
 .sidebar_brand {
   display: flex;
   align-items: center;
-
   gap: 10px;
-
   padding: 0 8px;
-
   margin-bottom: 30px;
 }
-
 
 .sidebar_brand_logo {
   width: 42px;
   height: 42px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 50%;
-
+  border-radius: 50%; 
   background-color: #e8eed8;
-
   font-size: 24px;
 }
 
-
 .sidebar_brand h2 {
   margin: 0;
-
   font-size: 17px;
-
   color: #1f3022;
 }
 
 
 .sidebar_brand p {
   margin: 3px 0 0;
-
   font-size: 11px;
-
   color: #687068;
 }
-
-
-/* =========================
-   NAVIGATION
-========================= */
 
 .sidebar_navigation {
   display: flex;
   flex-direction: column;
-
   gap: 6px;
 }
 
-
-/* NORMAL LINK */
-
 .sidebar_link {
   width: 100%;
-
   min-height: 42px;
-
   display: flex;
   align-items: center;
-
   gap: 13px;
-
   padding: 10px 12px;
 
   box-sizing: border-box;
@@ -110,8 +73,9 @@
   cursor: pointer;
 
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
 }
 
 
@@ -169,27 +133,21 @@
 .sidebar_submenu_link {
   display: flex;
   align-items: center;
-
   gap: 10px;
-
   padding: 7px 5px;
-
   border: none;
-
   background: transparent;
-
   color: #3e473f;
-
   font-size: 12px;
-
   cursor: pointer;
-
   text-align: left;
 }
 
 
-.sidebar_submenu_link:hover {
-  color: #24552e;
+.sidebar_submenu_link :hover {
+  color: #2e5524;
+  font-size: 13px;
+  transition:transform 0.50 ease;
 }
 
 
@@ -229,8 +187,8 @@
 .sidebar_divider {
   width: 100%;
 
-  margin: 12px 0;
-
+  margin-top: 12px;
+  margin-bottom:18px;
   border: none;
   border-top: 1px solid #e1e2dc;
 }
@@ -241,7 +199,8 @@
 ========================= */
 
 .sidebar_bottom {
-  margin-top: auto;
+  margin-top: 20px;
+  /* margin-bottom: 20px; */
 }
 
 
@@ -270,4 +229,197 @@
 
 .sidebar_logout:hover {
   background-color: #f2eee8;
+}
+
+/* =========================================
+   TABLET
+   Dashboard becomes 2 stat cards per row
+========================================= */
+@media (max-width: 1100px) {
+
+  .volunteer_sidebar {
+    width: 200px;
+  }
+
+  .dashboard_stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .volunteer_dashboard {
+    padding: 35px 35px;
+  }
+
+  .dashboard_greeting h1 {
+    font-size: 36px;
+  }
+
+  .sidebar_link {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .sidebar_submenu_link{
+    font-size: 11px;
+    font-weight: 500;
+
+  }
+  .sidebar_brand_logo {
+    width:30px;
+    height: 35px;
+    font-size: 20px;
+  }
+  .sidebar_brand_title h2 {
+    font-size:14px;
+  }
+}
+/* =========================================
+   MOBILE / SMALL TABLET
+   Dashboard becomes 1 stat card per row
+========================================= */
+
+@media (max-width: 650px) {
+
+  /* SIDEBAR */
+
+  .volunteer_sidebar {
+    width: 70px;
+    padding: 16px 8px;
+  }
+
+  .sidebar_brand {
+    justify-content: center;
+    padding: 0;
+    margin-bottom: 25px;
+  }
+
+  .sidebar_brand_logo {
+    width: 38px;
+    height: 38px;
+
+    font-size: 20px;
+  }
+
+
+  /* Hide brand title + tagline */
+
+  .sidebar_brand_title {
+    display: none;
+  }
+
+
+  /* =========================
+     SIDEBAR LINKS
+  ========================= */
+
+  .sidebar_link {
+    width: 46px;
+    min-height: 46px;
+
+    padding: 0;
+
+    justify-content: center;
+
+    font-size: 0;
+
+    gap: 0;
+  }
+
+
+  /* Keep icons visible */
+
+  .sidebar_link svg {
+    width: 20px;
+    height: 20px;
+  }
+
+
+  /* =========================
+     DISCOVER
+  ========================= */
+
+  .sidebar_link_left {
+    justify-content: center;
+    gap: 0;
+  }
+
+  .sidebar_link_left span {
+    display: none;
+  }
+
+
+  /* Hide Discover arrow */
+
+  .sidebar_discover > svg {
+    display: none;
+  }
+
+
+  /* Hide submenu */
+
+  .sidebar_submenu {
+    display: none;
+  }
+
+
+  /* =========================
+     NOTIFICATION
+  ========================= */
+
+  .sidebar_link {
+    position: relative;
+  }
+
+  .notification_badge {
+    position: absolute;
+
+    top: 2px;
+    right: 1px;
+
+    margin: 0;
+
+    min-width: 16px;
+    height: 16px;
+
+    padding: 0 3px;
+
+    font-size: 9px;
+  }
+
+
+  /* =========================
+     DIVIDER
+  ========================= */
+
+  .sidebar_divider {
+    width: 40px;
+
+    margin-top: 12px;
+    margin-bottom: 14px;
+  }
+
+
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  .sidebar_logout {
+    width: 46px;
+    height: 46px;
+
+    padding: 0;
+    margin: 0 auto;
+
+    justify-content: center;
+
+    gap: 0;
+  }
+
+  .sidebar_logout span {
+    display: none;
+  }
+
+  .sidebar_logout svg {
+    width: 20px;
+    height: 20px;
+  }
 }

@@ -1,0 +1,895 @@
+/* =========================================================
+   BROWSE ALL NGOs
+========================================================= */
+
+.browse_layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f7f3e5;
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.browse_content {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  background-color: #f7f3e5;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.browse_page {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px 55px 50px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.browse_header {
+  margin-bottom: 28px;
+}
+
+.browse_header h1 {
+  margin: 0;
+  color: #23412a;
+  font-size: 48px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.browse_header p {
+  margin: 10px 0 0;
+  color: #4f554d;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   SEARCH + FILTERS
+========================================================= */
+
+.browse_filters {
+  width: 100%;
+  display: grid;
+
+  /*
+    Search gets more space.
+    Cause, location and sort remain smaller.
+  */
+  grid-template-columns:
+    minmax(280px, 1.5fr)
+    minmax(180px, 1fr)
+    minmax(180px, 1fr)
+    minmax(180px, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 30px;
+}
+
+
+/* SEARCH BOX */
+
+.browse_search {
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 16px;
+
+  box-sizing: border-box;
+
+  background-color: #ffffff;
+
+  border: 1px solid #d8d8d2;
+
+  border-radius: 12px;
+
+  color: #243a28;
+}
+
+.browse_search svg {
+  flex-shrink: 0;
+}
+
+.browse_search input {
+  width: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #263529;
+
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.browse_search input::placeholder {
+  color: #777b75;
+}
+
+
+/* SELECT */
+
+.browse_select {
+  min-height: 50px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  background-color: #ffffff;
+
+  border: 1px solid #d8d8d2;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+.browse_select select {
+  width: 100%;
+  height: 50px;
+
+  padding: 0 42px 0 16px;
+
+  border: none;
+  outline: none;
+
+  appearance: none;
+
+  background: transparent;
+
+  color: #29342b;
+
+  font-family: inherit;
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+.browse_select svg {
+  position: absolute;
+
+  right: 15px;
+
+  pointer-events: none;
+
+  color: #29342b;
+}
+
+
+/* =========================================================
+   CAUSES
+========================================================= */
+
+.browse_causes {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.browse_causes h2 {
+  margin: 0 0 16px;
+
+  color: #263d29;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+
+/* CAUSE GRID */
+
+.cause_cards {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+
+/* CAUSE CARD */
+
+.cause_card {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(88, 117, 86, 0.16);
+
+  border-radius: 13px;
+
+  background-color: #eef3e6;
+
+  color: #263b29;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cause_card:hover {
+  transform: translateY(-2px);
+
+  border-color: #8da481;
+
+  box-shadow: 0 4px 12px rgba(40, 65, 42, 0.08);
+}
+
+
+/* ACTIVE CAUSE */
+
+.cause_card_active {
+  background-color: #dce9c9;
+
+  border-color: #2c6b34;
+}
+
+
+/* CAUSE ICON */
+
+.cause_icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background-color: #e4edd8;
+
+  color: #2c6b34;
+}
+
+
+/* CAUSE TEXT */
+
+.cause_content {
+  min-width: 0;
+}
+
+.cause_content h3 {
+  margin: 0;
+
+  color: #28382b;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.cause_content p {
+  margin: 4px 0 0;
+
+  color: #646a62;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   ORGANIZATIONS SECTION
+========================================================= */
+
+.browse_organizations {
+  width: 100%;
+}
+
+
+/* HEADER */
+
+.organizations_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid rgba(88, 117, 86, 0.18);
+}
+
+.organizations_header h2 {
+  margin: 0;
+
+  color: #263d29;
+
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.organizations_header span {
+  color: #5f655d;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   NGO GRID
+========================================================= */
+
+.browse_ngo_grid {
+  width: 100%;
+
+  display: grid;
+
+  /*
+    4 cards per row on large screens.
+    New NGOs automatically move to the next row.
+  */
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 20px;
+
+  align-items: stretch;
+}
+
+
+/* =========================================================
+   NGO CARD
+========================================================= */
+
+.browse_ngo_card {
+  min-width: 0;
+  min-height: 235px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  background-color: #fcfaf2;
+
+  border: 1px solid rgba(88, 117, 86, 0.20);
+
+  border-radius: 13px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.browse_ngo_card:hover {
+  transform: translateY(-3px);
+
+  border-color: rgba(88, 117, 86, 0.38);
+
+  box-shadow:
+    0 7px 18px rgba(40, 65, 42, 0.09);
+}
+
+
+/* =========================================================
+   NGO ICON
+========================================================= */
+
+.browse_ngo_icon {
+  width: 58px;
+  height: 58px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 12px;
+
+  border: 1px solid rgba(88, 117, 86, 0.20);
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background-color: #eef3e6;
+
+  color: #2c6b34;
+
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.browse_ngo_icon img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* =========================================================
+   NGO CONTENT
+========================================================= */
+
+.browse_ngo_content {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.browse_ngo_content h3 {
+  margin: 0 0 8px;
+
+  color: #26352a;
+
+  font-size: 18px;
+  line-height: 1.25;
+
+  font-weight: 700;
+}
+
+.browse_ngo_description {
+  margin: 0 0 12px;
+
+  color: #60645d;
+
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   NGO TAGS
+========================================================= */
+
+.browse_ngo_tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.browse_ngo_tags span {
+  padding: 5px 8px;
+
+  border: 1px solid rgba(88, 117, 86, 0.25);
+
+  border-radius: 999px;
+
+  background-color: #e8eedc;
+
+  color: #315437;
+
+  font-size: 11px;
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   NGO BOTTOM
+========================================================= */
+
+.browse_ngo_bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+
+/* LOCATION */
+
+.browse_ngo_location {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color: #555c54;
+
+  font-size: 12px;
+}
+
+.browse_ngo_location svg {
+  flex-shrink: 0;
+}
+
+.browse_ngo_location span {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   VIEW PROFILE
+========================================================= */
+
+.browse_profile_button {
+  flex-shrink: 0;
+
+  padding: 8px 13px;
+
+  border: 1px solid #587556;
+
+  border-radius: 7px;
+
+  background-color: transparent;
+
+  color: #285a32;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.browse_profile_button:hover {
+  background-color: #2c6b34;
+
+  color: white;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.browse_empty {
+  grid-column: 1 / -1;
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  border: 1px dashed #b8c4ae;
+
+  border-radius: 14px;
+
+  background-color: rgba(252, 250, 242, 0.7);
+}
+
+.browse_empty h3 {
+  margin: 0 0 8px;
+
+  color: #2c482d;
+
+  font-size: 20px;
+}
+
+.browse_empty p {
+  margin: 0;
+
+  color: #70756e;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.browse_pagination {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-top: 30px;
+}
+
+.browse_pagination button {
+  min-width: 34px;
+  height: 34px;
+
+  padding: 0 9px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background-color: transparent;
+
+  color: #304332;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.browse_pagination button:hover:not(:disabled) {
+  background-color: #dfe9d2;
+}
+
+.browse_pagination .pagination_active {
+  background-color: #2c6b34;
+
+  color: white;
+}
+
+.browse_pagination button:disabled {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   LARGE TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+
+  .browse_page {
+    padding: 35px 35px 45px;
+  }
+
+  .browse_header h1 {
+    font-size: 42px;
+  }
+
+  .browse_filters {
+    grid-template-columns:
+      1.5fr
+      1fr
+      1fr;
+  }
+
+  /*
+    Sort moves to next available space.
+  */
+
+  .browse_filters .browse_select:last-child {
+    grid-column: span 1;
+  }
+
+  .cause_cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .browse_ngo_grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .browse_page {
+    padding: 30px 25px 40px;
+  }
+
+  .browse_header h1 {
+    font-size: 38px;
+  }
+
+  .browse_header p {
+    font-size: 16px;
+  }
+
+  .browse_filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .browse_search {
+    grid-column: 1 / -1;
+  }
+
+  .cause_cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .browse_ngo_grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .browse_content {
+    width: 100%;
+  }
+
+  .browse_page {
+    padding: 25px 18px 35px;
+  }
+
+
+  /* HEADER */
+
+  .browse_header {
+    margin-bottom: 22px;
+  }
+
+  .browse_header h1 {
+    font-size: 32px;
+  }
+
+  .browse_header p {
+    font-size: 15px;
+  }
+
+
+  /* FILTERS */
+
+  .browse_filters {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .browse_search {
+    grid-column: auto;
+  }
+
+
+  /* CAUSES */
+
+  .cause_cards {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
+  }
+
+  .cause_card {
+    padding: 10px;
+
+    gap: 8px;
+  }
+
+  .cause_icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .cause_content h3 {
+    font-size: 12px;
+  }
+
+  .cause_content p {
+    font-size: 10px;
+  }
+
+
+  /* NGO GRID */
+
+  .browse_ngo_grid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+
+  /* NGO CARD */
+
+  .browse_ngo_card {
+    min-height: 220px;
+
+    padding: 16px;
+  }
+
+
+  /* ORGANIZATION HEADER */
+
+  .organizations_header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+
+  /* NGO BOTTOM */
+
+  .browse_ngo_bottom {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .browse_profile_button {
+    width: 100%;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .browse_page {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .browse_header h1 {
+    font-size: 28px;
+  }
+
+  .cause_cards {
+    grid-template-columns: 1fr;
+  }
+
+}

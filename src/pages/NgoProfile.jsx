@@ -252,55 +252,7 @@ const NgoProfile = () => {
                 does, who you support, and how they can contribute.
                 </p>
             </div>
-{/* 
-                <TextareaBox
-                Kind = 'mission'
-                Name = 'Mission & Goals'
-                Statename = {ngoData.mission}
-                handleChange = {handleChange}
-                Place = "What is your organization's mission? What change are you working toward?"
-                Count = '5'
-                required
-                />
             
-                <TextareaBox
-                Kind = 'description'
-                Name = 'About Your Organization'
-                Statename = {ngoData.description}
-                handleChange = {handleChange}
-                Place = "Tell volunteers about your organization, its background, the communities you work with, and the kind of work you do."
-                Count = '6'
-                required
-                />
-
-                <TextareaBox
-                Kind = 'programs'
-                Name = 'Programs & Activities'
-                Statename = {ngoData.programs}
-                handleChange = {handleChange}
-                Place = "Describe your regular programs, projects, events, drives, or other activities."
-                Count = '5'
-                required
-                />
-
-                <TextareaBox
-                Kind = 'volunteerHelp'
-                Name = 'How Can Volunteers Help?'
-                Statename = {ngoData.volunteerHelp}
-                handleChange = {handleChange}
-                Place = "For example: Volunteers can participate in teaching sessions, distribution drives, community visits, event support, fundraising, technical work, or other activities."
-                Count = '6'
-                required
-                />
-
-                <TextareaBox
-                Kind = 'currentNeeds'
-                Name = 'Current Needs'
-                Statename = {ngoData.currentNeeds}
-                handleChange = {handleChange}
-                Place = "Is there anything your organization currently needs help with? For example: volunteers for an upcoming drive, book donations, event support, etc."
-                Count = '5'
-                /> */}
                 {ngoTextareaFields.map((field) => (
                 <TextareaBox
                     key={field.Kind}

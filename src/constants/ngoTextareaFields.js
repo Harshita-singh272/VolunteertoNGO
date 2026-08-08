@@ -27,7 +27,7 @@ const ngoTextareaFields = [
     Kind: "volunteerHelp",
     Name: "How Can Volunteers Help?",
     Place:
-      "For example: Volunteers can participate in teaching sessions, distribution drives, community visits, event support, fundraising, technical work, or other activities.",
+      "Example:• Teach mathematics or English to students  • Conduct basic computer-literacy workshops  • Create educational material  • Assist during weekend activities  • Help with our website or social media    {Mention whether prior experience or specific skills are required.}",
     Count: "6",
     required: true,
   },
