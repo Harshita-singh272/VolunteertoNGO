@@ -10,7 +10,8 @@ import {
   User,
   LogOut,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Heart
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -163,6 +164,8 @@ const VolunteerSidebar = () => {
         <button
           type="button"
           className="sidebar_link"
+
+          onClick={()=> navigate("/volunteer/experience")}
         >
 
           <Award size={19} />
@@ -195,6 +198,21 @@ const VolunteerSidebar = () => {
 
         </button>
 
+        <button
+          type="button"
+          className="sidebar_link"
+          onClick={()=> navigate("/volunteer/saved-ngo")}
+        >
+
+          <Heart size={19} />
+
+          <span>
+            Saved
+          </span>
+
+
+        </button>
+
 
         {/* =====================================
             DIVIDER
@@ -210,6 +228,7 @@ const VolunteerSidebar = () => {
         <button
           type="button"
           className="sidebar_link"
+          onClick={() => navigate("/volunteer-profile")}
         >
 
           <User size={19} />

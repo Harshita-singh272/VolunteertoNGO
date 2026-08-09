@@ -338,4 +338,4 @@ const NgoProfile = () => {
   );
 };
 
-export default NgoProfile;
+export default NgoProfileForm;

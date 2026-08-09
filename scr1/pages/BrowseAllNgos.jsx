@@ -148,8 +148,8 @@ const BrowseAllNgos = () => {
   const handleViewProfile = (ngo) => {
 
     navigate(
-      `/ngo/${ngo.id}`
-    );
+                  `/ngo/${ngo.id}`
+                )
 
   };
 

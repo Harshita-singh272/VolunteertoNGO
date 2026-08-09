@@ -1,0 +1,503 @@
+.saved_ngos_layout {
+  min-height: 100vh;
+  display: flex;
+  background-color: rgb(239, 235, 215);
+}
+
+.saved_ngos_main {
+  flex: 1;
+  min-width: 0;
+}
+
+.saved_ngos_page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 45px 50px 70px;
+  box-sizing: border-box;
+}
+
+.saved_ngos_heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 18px;
+}
+
+.saved_ngos_heading h1 {
+  margin: 0 0 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 42px;
+  line-height: 1.1;
+  color: rgb(27, 67, 39);
+}
+
+.saved_ngos_heading p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: rgb(90, 90, 76);
+}
+
+.saved_ngos_search {
+  width: 270px;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 14px;
+  background-color: rgb(247, 243, 229);
+  border: 1px solid rgba(88, 117, 86, 0.25);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.saved_ngos_search svg {
+  color: rgb(44, 72, 45);
+  flex-shrink: 0;
+}
+
+.saved_ngos_search input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: rgb(44, 72, 45);
+}
+
+.saved_ngos_search input::placeholder {
+  color: rgb(120, 120, 105);
+}
+
+.saved_ngos_count {
+  margin-bottom: 22px;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(44, 72, 45);
+}
+
+.saved_ngos_list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.saved_ngo_card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 22px 25px;
+  background-color: rgb(247, 243, 229);
+  border: 1px solid rgba(88, 117, 86, 0.2);
+  border-radius: 17px;
+  box-shadow: 0 5px 15px rgba(54, 70, 52, 0.07);
+  box-sizing: border-box;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.saved_ngo_card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(54, 70, 52, 0.1);
+}
+
+.saved_ngo_logo {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid rgba(88, 117, 86, 0.2);
+  border-radius: 13px;
+}
+
+.saved_ngo_logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.saved_ngo_logo_placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 42px;
+  color: rgb(44, 72, 45);
+  background-color: rgb(229, 232, 210);
+}
+
+.saved_ngo_information {
+  flex: 1;
+  min-width: 0;
+}
+
+.saved_ngo_information h2 {
+  margin: 0 0 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  line-height: 1.2;
+  color: rgb(27, 67, 39);
+}
+
+.saved_ngo_location {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: rgb(75, 82, 70);
+}
+
+.saved_ngo_location svg {
+  color: rgb(44, 72, 45);
+  flex-shrink: 0;
+}
+
+.saved_ngo_information p {
+  max-width: 700px;
+  margin: 0 0 13px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgb(85, 85, 72);
+}
+
+.saved_ngo_causes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.saved_ngo_cause {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  background-color: rgb(229, 232, 210);
+  border-radius: 20px;
+  font-size: 13px;
+  color: rgb(44, 72, 45);
+}
+
+.saved_ngo_actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  min-width: 125px;
+  flex-shrink: 0;
+}
+
+.saved_ngo_button,
+.saved_ngo_view_button {
+  width: 100%;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.saved_ngo_button {
+  background-color: transparent;
+  border: 1px solid rgb(210, 80, 80);
+  color: rgb(190, 40, 40);
+}
+
+.saved_ngo_button:hover {
+  background-color: rgb(255, 235, 235);
+}
+
+.saved_ngo_view_button {
+  background-color: rgb(88, 117, 86);
+  border: 1px solid rgb(88, 117, 86);
+  color: white;
+}
+
+.saved_ngo_view_button:hover {
+  background-color: rgb(66, 91, 64);
+}
+
+.saved_ngo_button:active,
+.saved_ngo_view_button:active {
+  transform: scale(0.98);
+}
+
+.saved_ngo_empty {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  background-color: rgb(247, 243, 229);
+  border: 1px solid rgba(88, 117, 86, 0.2);
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+.saved_empty_icon {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  background-color: rgb(229, 232, 210);
+  color: rgb(88, 117, 86);
+}
+
+.saved_ngo_empty h2 {
+  margin: 0 0 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  color: rgb(44, 72, 45);
+}
+
+.saved_ngo_empty p {
+  max-width: 420px;
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgb(95, 95, 80);
+}
+
+.saved_ngo_empty button {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 9px;
+  background-color: rgb(44, 72, 45);
+  color: white;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.saved_ngo_empty button:hover {
+  background-color: rgb(66, 91, 64);
+}
+
+.saved_explore_card {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 30px;
+  padding: 12px 20px;
+  background-color: rgb(229, 232, 210);
+  border-radius: 8px;
+  border: 1px solid rgba(88, 117, 86, 0.12);
+  box-sizing: border-box;
+}
+
+.saved_explore_icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(27, 67, 39);
+}
+
+.saved_explore_content {
+  flex: 1;
+  min-width: 0;
+}
+
+.saved_explore_content h3 {
+  margin: 0 0 2px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  line-height: 1.2;
+  color: rgb(27, 67, 39);
+}
+
+.saved_explore_content p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgb(70, 80, 65);
+}
+
+.saved_explore_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 9px 14px;
+  border: none;
+  border-radius: 7px;
+  background-color: rgb(27, 67, 39);
+  color: white;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.saved_explore_button:hover {
+  background-color: rgb(44, 82, 50);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1050px) {
+  .saved_ngos_page {
+    padding: 40px 30px 60px;
+  }
+
+  .saved_ngo_card {
+    gap: 18px;
+    padding: 20px;
+  }
+
+  .saved_ngo_logo {
+    width: 105px;
+    height: 105px;
+  }
+
+  .saved_ngo_information h2 {
+    font-size: 22px;
+  }
+
+  .saved_ngo_actions {
+    min-width: 110px;
+  }
+}
+
+@media (max-width: 900px) {
+  .saved_ngos_heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .saved_ngos_search {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .saved_ngo_card {
+    align-items: flex-start;
+  }
+
+  .saved_ngo_actions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .saved_ngos_page {
+    padding: 30px 20px 50px;
+  }
+
+  .saved_ngos_heading h1 {
+    font-size: 36px;
+  }
+
+  .saved_ngo_card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+  }
+
+  .saved_ngo_logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .saved_ngo_actions {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+    flex-direction: row;
+  }
+
+  .saved_ngo_button,
+  .saved_ngo_view_button {
+    flex: 1;
+  }
+
+  .saved_explore_card {
+    align-items: flex-start;
+  }
+
+  .saved_explore_button {
+    padding: 9px 11px;
+  }
+}
+
+@media (max-width: 500px) {
+  .saved_ngos_page {
+    padding: 25px 15px 40px;
+  }
+
+  .saved_ngos_heading h1 {
+    font-size: 32px;
+  }
+
+  .saved_ngos_heading p {
+    font-size: 15px;
+  }
+
+  .saved_ngo_card {
+    padding: 16px;
+  }
+
+  .saved_ngo_information h2 {
+    font-size: 21px;
+  }
+
+  .saved_ngo_information p {
+    font-size: 14px;
+  }
+
+  .saved_ngo_actions {
+    flex-direction: column;
+  }
+
+  .saved_ngo_empty {
+    min-height: 330px;
+    padding: 25px 18px;
+  }
+
+  .saved_explore_card {
+    flex-wrap: wrap;
+    padding: 13px 15px;
+  }
+
+  .saved_explore_content {
+    min-width: calc(100% - 50px);
+  }
+
+  .saved_explore_button {
+    width: 100%;
+  }
+}

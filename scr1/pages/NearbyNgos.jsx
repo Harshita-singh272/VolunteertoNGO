@@ -1,10 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/NearbyNgos.css";
 import { Search, MapPin, Filter } from "lucide-react";
 import NgoCard from "../components/NgoCard.jsx";
 import { nearbyNgos } from "../constants/ngoConstants.js";
 import Profilebar from "../components/Profilebar.jsx";
 const NearbyNgos = () => {
+  const navigate = useNavigate();
+
   return (
     <div>
       <Profilebar/>
@@ -85,7 +88,7 @@ const NearbyNgos = () => {
             description={ngo.description}
             causes={ngo.causes}
             distance={`${ngo.distance} km`}
-            onClick={() => console.log(ngo.id)}
+            onClick={() => navigate(`/ngo/${ngo.id}`)}
           />
 
         ))}

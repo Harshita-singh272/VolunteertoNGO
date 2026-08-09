@@ -20,11 +20,6 @@ const CauseCard = ({
         )
       }
     >
-
-      <div className="cause_icon">
-        {/* You can add an icon here later */}
-      </div>
-
       <div className="cause_content">
 
         <h3>
