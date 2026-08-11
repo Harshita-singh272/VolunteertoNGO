@@ -1,0 +1,424 @@
+.volunteer_request_view_layout {
+  min-height: 100vh;
+
+  display: flex;
+
+  background-color: rgb(247, 243, 223);
+}
+
+.volunteer_request_view_main {
+  flex: 1;
+  min-width: 0;
+}
+
+.volunteer_request_view_page {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 35px 45px 60px;
+
+  box-sizing: border-box;
+}
+
+.request_view_back_button {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 25px;
+  padding: 9px 15px;
+
+  border: 1px solid rgb(181, 187, 160);
+  border-radius: 8px;
+
+  background-color: rgb(247, 243, 229);
+  color: rgb(54, 76, 52);
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.request_view_back_button:hover {
+  background-color: rgb(229, 232, 210);
+
+  border-color: rgb(88, 117, 86);
+}
+
+.request_view_heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 25px;
+}
+
+.request_view_heading h1 {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 34px;
+  line-height: 1.2;
+
+  color: rgb(44, 72, 45);
+}
+
+.request_view_heading p {
+  margin: 8px 0 0;
+
+  color: rgb(91, 94, 78);
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.request_view_status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 15px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.request_view_status_pending {
+  background-color: rgb(239, 231, 201);
+  color: rgb(116, 92, 38);
+}
+
+.request_view_status_accepted {
+  background-color: rgb(218, 235, 215);
+  color: rgb(45, 102, 49);
+}
+
+.request_view_status_denied {
+  background-color: rgb(241, 220, 217);
+  color: rgb(142, 61, 54);
+}
+
+.request_view_status_message {
+  background-color: rgb(219, 229, 240);
+  color: rgb(48, 84, 119);
+}
+
+.request_view_content {
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+.request_view_ngo_card {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 25px;
+
+  background-color: rgb(247, 243, 229);
+
+  border: 1px solid rgba(88, 117, 86, 0.18);
+  border-radius: 15px;
+
+  box-shadow:
+    3px 6px 18px
+    rgba(54, 70, 52, 0.08);
+
+  box-sizing: border-box;
+}
+
+.request_view_logo {
+  width: 70px;
+  height: 70px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background-color: rgb(229, 232, 210);
+
+  color: rgb(61, 84, 59);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.request_view_ngo_information {
+  min-width: 0;
+}
+
+.request_view_ngo_information > span {
+  color: rgb(110, 110, 94);
+
+  font-size: 12px;
+}
+
+.request_view_ngo_information h2 {
+  margin: 4px 0 7px;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 24px;
+
+  color: rgb(44, 72, 45);
+}
+
+.request_view_location {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  color: rgb(89, 93, 78);
+
+  font-size: 14px;
+}
+
+.request_view_location svg {
+  color: rgb(88, 117, 86);
+}
+
+.request_view_card {
+  padding: 27px;
+
+  background-color: rgb(247, 243, 229);
+
+  border: 1px solid rgba(88, 117, 86, 0.18);
+  border-radius: 15px;
+
+  box-shadow:
+    3px 6px 18px
+    rgba(54, 70, 52, 0.08);
+
+  box-sizing: border-box;
+}
+
+.request_view_card_heading {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 20px;
+}
+
+.request_view_card_heading svg {
+  flex-shrink: 0;
+
+  color: rgb(88, 117, 86);
+}
+
+.request_view_card_heading h2 {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 22px;
+
+  color: rgb(44, 72, 45);
+}
+
+.request_view_information_grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+}
+
+.request_view_information_item {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  padding: 15px 17px;
+
+  border-radius: 9px;
+
+  background-color: rgb(240, 239, 222);
+}
+
+.request_view_information_item span {
+  color: rgb(110, 110, 94);
+
+  font-size: 12px;
+}
+
+.request_view_information_item strong {
+  color: rgb(50, 63, 48);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+.request_view_full_width {
+  grid-column: 1 / -1;
+}
+
+.request_view_text {
+  padding: 18px;
+
+  border-radius: 10px;
+
+  background-color: rgb(240, 239, 222);
+}
+
+.request_view_text p {
+  margin: 0;
+
+  color: rgb(77, 81, 69);
+
+  font-size: 15px;
+  line-height: 1.75;
+
+  white-space: pre-line;
+}
+
+.request_view_footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 8px 10px;
+
+  padding: 18px 20px;
+
+  border-radius: 10px;
+
+  background-color: rgb(229, 232, 210);
+
+  color: rgb(77, 89, 73);
+
+  font-size: 13px;
+}
+
+.request_view_footer svg {
+  color: rgb(88, 117, 86);
+}
+
+.request_view_footer svg:nth-of-type(2) {
+  margin-left: 12px;
+}
+
+.request_view_error_card {
+  padding: 35px;
+
+  background-color: rgb(247, 243, 229);
+
+  border: 1px solid rgba(88, 117, 86, 0.18);
+  border-radius: 15px;
+
+  box-shadow:
+    3px 6px 18px
+    rgba(54, 70, 52, 0.08);
+
+  text-align: center;
+}
+
+.request_view_error_card h2 {
+  margin: 0 0 10px;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  color: rgb(44, 72, 45);
+}
+
+.request_view_error_card p {
+  margin: 0;
+
+  color: rgb(91, 94, 78);
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .volunteer_request_view_page {
+    padding: 28px 20px 45px;
+  }
+
+  .request_view_heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .request_view_heading h1 {
+    font-size: 29px;
+  }
+
+  .request_view_information_grid {
+    grid-template-columns: 1fr;
+  }
+
+  .request_view_full_width {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 500px) {
+  .volunteer_request_view_page {
+    padding: 24px 15px 40px;
+  }
+
+  .request_view_ngo_card {
+    align-items: flex-start;
+
+    padding: 20px;
+  }
+
+  .request_view_logo {
+    width: 58px;
+    height: 58px;
+
+    font-size: 25px;
+  }
+
+  .request_view_ngo_information h2 {
+    font-size: 20px;
+  }
+
+  .request_view_card {
+    padding: 20px;
+  }
+
+  .request_view_card_heading h2 {
+    font-size: 20px;
+  }
+
+  .request_view_footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .request_view_footer svg:nth-of-type(2) {
+    margin-left: 0;
+  }
+}

@@ -54,7 +54,7 @@ export const nearbyNgos = [
     ],
 
     distance: 4.2,
-    location: "Delhi",
+    location: "Mumbai",
   },
 
   {

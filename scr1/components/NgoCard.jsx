@@ -3,11 +3,8 @@ import "../styles/NgoCard.css";
 
 const NgoCard = (props) => {
   return (
-
     <div className="ngo_card">
-
       <div className="ngo_logo">
-
         {props.logo ? (
           <img
             src={props.logo}
@@ -18,50 +15,47 @@ const NgoCard = (props) => {
             NGO
           </div>
         )}
-
       </div>
 
-
       <div className="ngo_content">
-
-        <h2>
-          {props.organizationName}
-        </h2>
+        <h2>{props.organizationName}</h2>
 
         <p className="ngo_description">
           {props.description}
         </p>
-      <div className="ngo_tags">
-        {props.causes.map((cause) => (
-          <span
-            className="ngo_tag"
-            key={cause}
+
+        <div className="ngo_tags">
+          {props.causes?.map((cause) => (
+            <span
+              className="ngo_tag"
+              key={cause}
+            >
+              {cause}
+            </span>
+          ))}
+        </div>
+
+        <div className="ngo_card_bottom">
+          <div className="ngo_location_distance">
+            <p className="ngo_distance">
+              📍 {props.distance}
+            </p>
+
+            <span className="ngo_location">
+              {props.location || "Location not available"}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            className="ngo_button"
+            onClick={props.onClick}
           >
-            {cause}
-          </span>
-        ))}
+            View Profile →
+          </button>
+        </div>
       </div>
-
-
-      <div className="ngo_card_bottom">
-
-        <p className="ngo_distance">
-          📍 {props.distance} km away
-        </p>
-
-        <button
-          type="button"
-          className="ngo_button"
-          onClick={props.onClick}
-        >
-          View Profile →
-        </button>
-
-      </div>
-      </div>
-
     </div>
-
   );
 };
 

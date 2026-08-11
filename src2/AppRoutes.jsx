@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import {
   Routes,
   Route,
@@ -13,109 +12,69 @@ import BrowseAllNgos from "../scr1/pages/BrowseAllNgos.jsx";
 
 import VolunteerForm from "./components/VolunteerProfileform.jsx";
 import VolunteerProfile from "./pages/VolunteerProfile.jsx";
-import NgoProfile from "./pages/NgoProfile.jsx";
+import NgoProfilePublicVol from "./pages/NgoProfilePublicVol.jsx";
 
 import MyExperience from "../src3/pages/MyExperience.jsx";
 import SavedNgos from "../src3/pages/SavedNgos.jsx";
+import RequestToVolunteer from "../src3/pages/RequestToVolunteer.jsx";
+import VolunteerRequests from "../src3/pages/VolunteerRequests.jsx";
+import VolunteerRequestView from "../src3/pages/VolunteerRequestView.jsx";
+import Notifications from "../src3/pages/Notifications.jsx";
+
+import NgoDashboard from "../src4/pages/NgoDashboard.jsx";
+import NgoProfile from "../src4/pages/NgoProfile.jsx";
+import NgoProfilePublicNgo from "../src4/pages/NgoProfilePublicNgo.jsx";
 
 import { volunteerProfileData } from "./constants/volunteerProfileData.js";
 import { nearbyNgos } from "../scr1/constants/ngoConstants.js";
 
-
-/* =========================================
-   NGO PROFILE ROUTE
-========================================= */
-
 const NgoProfileRoute = () => {
-
   const { id } = useParams();
 
   const ngo = nearbyNgos.find(
-    (item) =>
-      String(item.id) === String(id)
+    (item) => String(item.id) === String(id)
   );
 
-  return (
-    <NgoProfile ngo={ngo} />
-  );
+  return <NgoProfilePublicVol ngo={ngo} />;
 };
 
+const NgoProfileviewRoute = () => {
+  const { id } = useParams();
+
+  const ngo = nearbyNgos.find(
+    (item) => String(item.id) === String(id)
+  );
+
+  return <NgoProfilePublicNgo ngo={ngo} />;
+};
 
 const AppRoutes = () => {
-
   const navigate = useNavigate();
-
-
-  /* =========================================
-     VOLUNTEER PROFILE STATE
-  ========================================= */
 
   const [profileData, setProfileData] =
     useState(volunteerProfileData);
 
-
-  /* =========================================
-     SAVE VOLUNTEER PROFILE
-  ========================================= */
-
   const handleProfileSave = (updatedProfile) => {
-
-    console.log(
-      "Updated profile:",
-      updatedProfile
-    );
-
     setProfileData(updatedProfile);
-
     navigate("/volunteer-profile");
-
   };
 
-
   return (
-
     <Routes>
-
-
-      {/* =====================================
-          VOLUNTEER DASHBOARD
-      ===================================== */}
-
       <Route
         path="/"
-        element={
-          <VolunteerDashboard />
-        }
+        element={<VolunteerDashboard />}
       />
-
-
-      {/* =====================================
-          NEARBY NGOs
-      ===================================== */}
 
       <Route
         path="/nearby-ngos"
-        element={
-          <NearbyNgoPage />
-        }
+        element={<NearbyNgoPage />}
       />
-
-
-      {/* =====================================
-          BROWSE NGOs
-      ===================================== */}
 
       <Route
         path="/browse-ngos"
-        element={
-          <BrowseAllNgos />
-        }
+        element={<BrowseAllNgos />}
       />
-
-
-      {/* =====================================
-          VOLUNTEER PROFILE
-      ===================================== */}
 
       <Route
         path="/volunteer-profile"
@@ -125,11 +84,6 @@ const AppRoutes = () => {
           />
         }
       />
-
-
-      {/* =====================================
-          EDIT VOLUNTEER PROFILE
-      ===================================== */}
 
       <Route
         path="/volunteer-profile/edit"
@@ -141,34 +95,70 @@ const AppRoutes = () => {
         }
       />
 
-
-      {/* =====================================
-          NGO PROFILE
-      ===================================== */}
-
       <Route
         path="/ngo/:id"
+        element={<NgoProfileRoute />}
+      />
+
+      <Route
+        path="/volunteer/experience"
+        element={<MyExperience />}
+      />
+
+      <Route
+        path="/volunteer/requests"
         element={
-          <NgoProfileRoute />
+          <VolunteerRequests
+            profileData={profileData}
+          />
         }
       />
+
       <Route
-      path="/volunteer/experience"
-      element={
-        <MyExperience/>
-      }
+        path="/volunteer/request/view/:requestId"
+        element={<VolunteerRequestView />}
       />
 
       <Route
-      path="/volunteer/saved-ngo"
-      element={<SavedNgos/>}
+        path="/volunteer/notifications"
+        element={<Notifications />}
       />
-      
+
+      <Route
+        path="/volunteer/saved-ngo"
+        element={<SavedNgos />}
+      />
+
+      <Route
+        path="/volunteer/request/:ngoId"
+        element={
+          <RequestToVolunteer
+            profileData={profileData}
+          />
+        }
+      />
+
+      <Route
+        path="/ngo-dashboard"
+        element={<NgoDashboard />}
+      />
+
+      <Route
+        path="/ngo/profile"
+        element={<NgoProfile />}
+      />
+
+      <Route
+        path="/ngo/profile/edit"
+        element={<NgoProfile />}
+      />
+
+      <Route
+        path="/ngo/:id/preview"
+        element={<NgoProfileviewRoute />}
+      />
     </Routes>
-
   );
-
 };
-
 
 export default AppRoutes;

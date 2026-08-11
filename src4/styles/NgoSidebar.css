@@ -1,0 +1,151 @@
+.ngo_sidebar {
+  width: 285px;
+  min-height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 28px 20px;
+  background-color: #eef3e6;
+  border-right: 1px solid #d9e0d2;
+}
+
+.ngo_sidebar_logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 8px 35px;
+}
+
+.ngo_logo_icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #dcebd2;
+  color: #1d7138;
+}
+
+.ngo_logo_text h2 {
+  margin: 0;
+  color: #174d32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.ngo_logo_text p {
+  margin: 5px 0 0;
+  color: #647067;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+}
+
+.ngo_sidebar_nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ngo_sidebar_item {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 15px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 10px;
+  background-color: transparent;
+  color: #26382b;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.ngo_sidebar_item svg {
+  flex-shrink: 0;
+}
+
+.ngo_sidebar_item:hover {
+  background-color: #e2ecd9;
+}
+
+.ngo_sidebar_item.active {
+  background-color: rgb(23, 107, 53);
+  color: #ffffff;
+}
+
+.ngo_sidebar_item.active:hover {
+  background-color: #176b35;
+}
+
+.ngo_sidebar_bottom {
+  margin-top: auto;
+  padding-top: 25px;
+  border-top: 1px solid #d1dac9;
+}
+
+.ngo_logout {
+  color: #26382b;
+}
+
+.ngo_logout:hover {
+  background-color: #e2ecd9;
+}
+
+@media (max-width: 900px) {
+  .ngo_sidebar {
+    width: 230px;
+    padding: 25px 14px;
+  }
+
+  .ngo_logo_text h2 {
+    font-size: 16px;
+  }
+
+  .ngo_logo_text p {
+    font-size: 11px;
+  }
+
+  .ngo_sidebar_item {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 700px) {
+  .ngo_sidebar {
+    width: 80px;
+    padding: 20px 10px;
+  }
+
+  .ngo_sidebar_logo {
+    justify-content: center;
+    padding: 5px 0 30px;
+  }
+
+  .ngo_logo_text {
+    display: none;
+  }
+
+  .ngo_sidebar_item {
+    justify-content: center;
+    padding: 13px 8px;
+  }
+
+  .ngo_sidebar_item span {
+    display: none;
+  }
+
+  .ngo_sidebar_bottom {
+    padding-top: 20px;
+  }
+}

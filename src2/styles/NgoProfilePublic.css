@@ -1,0 +1,12 @@
+
+.ngo_profile_layout {
+  min-height: 100vh;
+  display: flex;
+  background-color: rgb(247, 243, 223);
+}
+
+.ngo_profile_main {
+  flex: 1;
+  min-width: 0;
+}
+

@@ -1,0 +1,27 @@
+.ngo_public_static_page{
+  padding:20px;
+}
+.ngo_request_button {
+  margin-top: 18px;
+  padding: 11px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background-color: rgb(88, 117, 86);
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.ngo_request_button:hover {
+  background-color: rgb(66, 91, 64);
+  transform: translateY(-1px);
+}
