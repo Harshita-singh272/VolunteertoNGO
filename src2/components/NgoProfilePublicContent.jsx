@@ -18,71 +18,39 @@ import { useNavigate } from "react-router-dom";
 import "../styles/NgoProfilePublicContent.css";
 
 const NgoProfilePublicContent = ({ ngo }) => {
-
   const navigate = useNavigate();
-
   const [isSaved, setIsSaved] = useState(false);
 
-
-  /* =========================================
-     CHECK IF NGO IS ALREADY SAVED
-  ========================================= */
-
   useEffect(() => {
-
     if (!ngo?.id) {
       setIsSaved(false);
       return;
     }
 
     try {
-
       const savedIds =
-        JSON.parse(
-          localStorage.getItem("savedNgos")
-        ) || [];
+        JSON.parse(localStorage.getItem("savedNgos")) || [];
 
-      setIsSaved(
-        savedIds.includes(ngo.id)
-      );
-
+      setIsSaved(savedIds.includes(ngo.id));
     } catch (error) {
-
-      console.error(
-        "Unable to read saved NGOs:",
-        error
-      );
-
+      console.error("Unable to read saved NGOs:", error);
       setIsSaved(false);
     }
-
   }, [ngo?.id]);
 
-
-  /* =========================================
-     SAVE / REMOVE NGO
-  ========================================= */
-
   const handleSaveNgo = () => {
-
     if (!ngo?.id) {
       return;
     }
 
     try {
-
       const savedIds =
-        JSON.parse(
-          localStorage.getItem("savedNgos")
-        ) || [];
-
+        JSON.parse(localStorage.getItem("savedNgos")) || [];
 
       if (isSaved) {
-
-        const updatedIds =
-          savedIds.filter(
-            (id) => id !== ngo.id
-          );
+        const updatedIds = savedIds.filter(
+          (id) => id !== ngo.id
+        );
 
         localStorage.setItem(
           "savedNgos",
@@ -90,15 +58,9 @@ const NgoProfilePublicContent = ({ ngo }) => {
         );
 
         setIsSaved(false);
-
       } else {
-
         if (!savedIds.includes(ngo.id)) {
-
-          const updatedIds = [
-            ...savedIds,
-            ngo.id,
-          ];
+          const updatedIds = [...savedIds, ngo.id];
 
           localStorage.setItem(
             "savedNgos",
@@ -108,354 +70,199 @@ const NgoProfilePublicContent = ({ ngo }) => {
 
         setIsSaved(true);
       }
-
     } catch (error) {
-
-      console.error(
-        "Unable to save NGO:",
-        error
-      );
+      console.error("Unable to save NGO:", error);
     }
   };
 
-
-  /* =========================================
-     REQUEST TO VOLUNTEER
-  ========================================= */
-
   const handleRequestToVolunteer = () => {
-
     if (!ngo?.id) {
       return;
     }
 
-    navigate(
-      `/volunteer/request/${ngo.id}`
-    );
+    navigate(`/volunteer/request/${ngo.id}`);
   };
 
-
-  /* =========================================
-     NGO NOT FOUND
-  ========================================= */
-
   if (!ngo) {
-
     return (
-
-      <div className="ngo_profile_page">
-
+      <div className="vol_ngo_profile_page">
         <button
           type="button"
-          className="ngo_back_button"
+          className="vol_ngo_back_button"
           onClick={() => navigate(-1)}
         >
           <ArrowLeft size={17} />
           Back
         </button>
 
-
-        <section className="ngo_info_card">
-
-          <h2>
-            NGO not found
-          </h2>
-
+        <section className="vol_ngo_info_card">
+          <h2>NGO not found</h2>
           <p>
             The organization you are looking for
             could not be found.
           </p>
-
         </section>
-
       </div>
     );
   }
 
-
-  const causes =
-    ngo.causes || [];
-
+  const causes = ngo.causes || [];
 
   const displayValue = (value) => {
-
     return value || "Not provided";
-
   };
 
-
   return (
-
-    <div className="ngo_profile_page">
-
-
-      {/* =====================================
-          BACK BUTTON
-      ===================================== */}
-
+    <div className="vol_ngo_profile_page">
+      {/* Back button */}
       <button
         type="button"
-        className="ngo_back_button"
+        className="vol_ngo_back_button"
         onClick={() => navigate(-1)}
       >
-
         <ArrowLeft size={17} />
-
         Back
-
       </button>
 
-
-      {/* =====================================
-          NGO HEADER
-      ===================================== */}
-
-      <section className="ngo_profile_header">
-
-
-        <div className="ngo_profile_logo">
-
+      {/* NGO Header */}
+      <section className="vol_ngo_profile_header">
+        <div className="vol_ngo_profile_logo">
           {ngo.logo ? (
-
             <img
               src={ngo.logo}
               alt={`${ngo.organizationName} logo`}
             />
-
           ) : (
-
-            <div className="ngo_logo_placeholder">
-
+            <div className="vol_ngo_logo_placeholder">
               {ngo.organizationName
                 ?.charAt(0)
                 .toUpperCase() || "N"}
-
             </div>
-
           )}
-
         </div>
 
-
-        <div className="ngo_profile_identity">
-
-
-          <div className="ngo_profile_title">
-
+        <div className="vol_ngo_profile_identity">
+          <div className="vol_ngo_profile_title">
             <h1>
-              {displayValue(
-                ngo.organizationName
-              )}
+              {displayValue(ngo.organizationName)}
             </h1>
-
           </div>
 
-
-          <div className="ngo_profile_location">
-
+          <div className="vol_ngo_profile_location">
             <MapPin size={17} />
 
             <span>
-              {displayValue(
-                ngo.location
-              )}
+              {displayValue(ngo.location)}
             </span>
-
 
             {ngo.distance !== undefined &&
               ngo.distance !== null && (
-
                 <span>
                   • {ngo.distance} km away
                 </span>
-
               )}
-
           </div>
 
-
           {causes.length > 0 && (
-
-            <div className="ngo_profile_causes">
-
+            <div className="vol_ngo_profile_causes">
               {causes.map((cause) => (
-
                 <span
                   key={cause}
-                  className="ngo_cause_tag"
+                  className="vol_ngo_cause_tag"
                 >
                   {cause}
                 </span>
-
               ))}
-
             </div>
-
           )}
-
         </div>
-
       </section>
 
+      {/* Main Content */}
+      <div className="vol_ngo_profile_content">
+        {/* LEFT COLUMN */}
+        <div className="vol_ngo_profile_left">
 
-      {/* =====================================
-          MAIN CONTENT
-      ===================================== */}
-
-      <div className="ngo_profile_content">
-
-
-        {/* ===================================
-            LEFT SIDE
-        =================================== */}
-
-        <div className="ngo_profile_left">
-
-
-          {/* ABOUT */}
-
-          <section className="ngo_info_card">
-
-            <h2>
-              About the Organization
-            </h2>
+          {/* About */}
+          <section className="vol_ngo_info_card">
+            <h2>About the Organization</h2>
 
             <p>
-              {displayValue(
-                ngo.description
-              )}
+              {displayValue(ngo.description)}
             </p>
-
           </section>
 
-
-          {/* MISSION */}
-
-          <section className="ngo_info_card">
-
-            <h2>
-              Our Mission
-            </h2>
+          {/* Mission */}
+          <section className="vol_ngo_info_card">
+            <h2>Our Mission</h2>
 
             <p>
-              {displayValue(
-                ngo.mission
-              )}
+              {displayValue(ngo.mission)}
             </p>
-
           </section>
 
-
-          {/* PROGRAMS */}
-
-          <section className="ngo_info_card">
-
-            <h2>
-              Programs & Work
-            </h2>
+          {/* Programs */}
+          <section className="vol_ngo_info_card">
+            <h2>Programs & Work</h2>
 
             <p>
-              {displayValue(
-                ngo.programs
-              )}
+              {displayValue(ngo.programs)}
             </p>
-
           </section>
 
-
-          {/* VOLUNTEER HELP */}
-
-          <section className="ngo_info_card">
-
-            <div className="ngo_card_heading">
-
+          {/* Volunteer Help */}
+          <section className="vol_ngo_info_card">
+            <div className="vol_ngo_card_heading">
               <Heart size={21} />
 
               <h2>
                 How Volunteers Can Help
               </h2>
-
             </div>
 
             <p>
-              {displayValue(
-                ngo.volunteerHelp
-              )}
+              {displayValue(ngo.volunteerHelp)}
             </p>
-
           </section>
 
-
-          {/* CURRENT NEEDS */}
-
-          <section className="ngo_info_card">
-
-            <h2>
-              Current Needs
-            </h2>
+          {/* Current Needs */}
+          <section className="vol_ngo_info_card">
+            <h2>Current Needs</h2>
 
             <p>
-              {displayValue(
-                ngo.currentNeeds
-              )}
+              {displayValue(ngo.currentNeeds)}
             </p>
-
           </section>
 
-
-          {/* AREAS OF WORK */}
-
-          <section className="ngo_info_card">
-
-            <h2>
-              Areas of Work
-            </h2>
-
+          {/* Areas of Work */}
+          <section className="vol_ngo_info_card">
+            <h2>Areas of Work</h2>
 
             {causes.length > 0 ? (
-
-              <div className="ngo_profile_causes">
-
+              <div className="vol_ngo_profile_causes">
                 {causes.map((cause) => (
-
                   <span
                     key={cause}
-                    className="ngo_cause_tag"
+                    className="vol_ngo_cause_tag"
                   >
                     {cause}
                   </span>
-
                 ))}
-
               </div>
-
             ) : (
-
-              <p>
-                No causes provided.
-              </p>
-
+              <p>No causes provided.</p>
             )}
-
           </section>
 
-
-          {/* =================================
-              REQUEST TO VOLUNTEER
-          ================================= */}
-
-          <section className="ngo_info_card">
-
-            <div className="ngo_card_heading">
-
+          {/* Request */}
+          <section className="vol_ngo_info_card">
+            <div className="vol_ngo_card_heading">
               <Heart size={21} />
 
               <h2>
                 Volunteer With This NGO
               </h2>
-
             </div>
-
 
             <p>
               Interested in supporting this
@@ -464,113 +271,70 @@ const NgoProfilePublicContent = ({ ngo }) => {
               that you would like to contribute.
             </p>
 
-
             <button
               type="button"
-              className="ngo_request_button"
+              className="vol_ngo_request_button"
               onClick={handleRequestToVolunteer}
             >
-
               Request to Volunteer
-
             </button>
-
           </section>
-
         </div>
 
+        {/* RIGHT COLUMN */}
+        <aside className="vol_ngo_profile_right">
 
-        {/* ===================================
-            RIGHT SIDE
-        =================================== */}
+          {/* Organization Details */}
+          <section className="vol_ngo_info_card">
+            <h2>Organization Details</h2>
 
-        <aside className="ngo_profile_right">
+            <div className="vol_ngo_detail_list">
 
-
-          {/* ORGANIZATION DETAILS */}
-
-          <section className="ngo_info_card">
-
-            <h2>
-              Organization Details
-            </h2>
-
-
-            <div className="ngo_detail_list">
-
-
-              <div className="ngo_detail_item">
-
+              <div className="vol_ngo_detail_item">
                 <MapPin size={19} />
 
                 <div>
-
-                  <span>
-                    Location
-                  </span>
+                  <span>Location</span>
 
                   <strong>
-                    {displayValue(
-                      ngo.location
-                    )}
+                    {displayValue(ngo.location)}
                   </strong>
-
                 </div>
-
               </div>
-
 
               {ngo.distance !== undefined &&
                 ngo.distance !== null && (
-
-                  <div className="ngo_detail_item">
-
+                  <div className="vol_ngo_detail_item">
                     <MapPin size={19} />
 
                     <div>
-
-                      <span>
-                        Distance
-                      </span>
+                      <span>Distance</span>
 
                       <strong>
                         {ngo.distance} km away
                       </strong>
-
                     </div>
-
                   </div>
-
                 )}
 
-
-              <div className="ngo_detail_item">
-
+              <div className="vol_ngo_detail_item">
                 <Calendar size={19} />
 
                 <div>
-
-                  <span>
-                    Founded
-                  </span>
+                  <span>Founded</span>
 
                   <strong>
                     {displayValue(
                       ngo.foundedYear
                     )}
                   </strong>
-
                 </div>
-
               </div>
 
-
-              <div className="ngo_detail_item">
-
+              <div className="vol_ngo_detail_item">
                 <Users size={19} />
 
                 <div>
-
                   <span>
                     Organization Size
                   </span>
@@ -580,37 +344,23 @@ const NgoProfilePublicContent = ({ ngo }) => {
                       ngo.organizationSize
                     )}
                   </strong>
-
                 </div>
-
               </div>
 
             </div>
-
           </section>
 
+          {/* Contact Information */}
+          <section className="vol_ngo_info_card">
+            <h2>Contact Information</h2>
 
-          {/* CONTACT INFORMATION */}
+            <div className="vol_ngo_detail_list">
 
-          <section className="ngo_info_card">
-
-            <h2>
-              Contact Information
-            </h2>
-
-
-            <div className="ngo_detail_list">
-
-
-              <div className="ngo_detail_item">
-
+              <div className="vol_ngo_detail_item">
                 <Building2 size={19} />
 
                 <div>
-
-                  <span>
-                    Contact Person
-                  </span>
+                  <span>Contact Person</span>
 
                   <strong>
                     {displayValue(
@@ -618,125 +368,82 @@ const NgoProfilePublicContent = ({ ngo }) => {
                     )}
                   </strong>
 
-
                   {ngo.contactPersonRole && (
-
                     <small>
                       {ngo.contactPersonRole}
                     </small>
-
                   )}
-
                 </div>
-
               </div>
 
-
-              <div className="ngo_detail_item">
-
+              <div className="vol_ngo_detail_item">
                 <Phone size={19} />
 
                 <div>
-
-                  <span>
-                    Phone
-                  </span>
+                  <span>Phone</span>
 
                   <strong>
                     {displayValue(
                       ngo.contactPhone
                     )}
                   </strong>
-
                 </div>
-
               </div>
 
-
-              <div className="ngo_detail_item">
-
+              <div className="vol_ngo_detail_item">
                 <Mail size={19} />
 
                 <div>
-
-                  <span>
-                    Email
-                  </span>
+                  <span>Email</span>
 
                   <strong>
                     {displayValue(
                       ngo.contactEmail
                     )}
                   </strong>
-
                 </div>
-
               </div>
 
-
-              <div className="ngo_detail_item">
-
+              <div className="vol_ngo_detail_item">
                 <Globe size={19} />
 
                 <div>
-
-                  <span>
-                    Website
-                  </span>
+                  <span>Website</span>
 
                   <strong>
                     {displayValue(
                       ngo.website
                     )}
                   </strong>
-
                 </div>
-
               </div>
 
-
-              <div className="ngo_detail_item">
-
+              <div className="vol_ngo_detail_item">
                 <Share2 size={19} />
 
                 <div>
-
-                  <span>
-                    Social Media
-                  </span>
+                  <span>Social Media</span>
 
                   <strong>
                     {displayValue(
                       ngo.socialLink
                     )}
                   </strong>
-
                 </div>
-
               </div>
 
             </div>
-
           </section>
 
-
-          {/* SAVE NGO */}
-
+          {/* Save NGO */}
           <section
-            className={`ngo_save_card ${
-              isSaved
-                ? "ngo_saved"
-                : ""
+            className={`vol_ngo_save_card ${
+              isSaved ? "vol_ngo_saved" : ""
             }`}
           >
-
             <Heart
               size={23}
-              fill={
-                isSaved
-                  ? "red"
-                  : "none"
-              }
+              fill={isSaved ? "red" : "none"}
               color={
                 isSaved
                   ? "red"
@@ -744,51 +451,35 @@ const NgoProfilePublicContent = ({ ngo }) => {
               }
             />
 
-
             <div>
-
               <h3>
-
                 {isSaved
                   ? "Saved NGO"
                   : "Interested in this NGO?"}
-
               </h3>
 
-
               <p>
-
                 {isSaved
                   ? "This organization has been saved to your list."
                   : "Save this organization to find it easily later."}
-
               </p>
-
             </div>
-
 
             <button
               type="button"
-              className={`ngo_save_button ${
+              className={`vol_ngo_save_button ${
                 isSaved
                   ? "saved"
                   : ""
               }`}
               onClick={handleSaveNgo}
             >
-
-              {isSaved
-                ? "Saved"
-                : "Save NGO"}
-
+              {isSaved ? "Saved" : "Save NGO"}
             </button>
-
           </section>
 
         </aside>
-
       </div>
-
     </div>
   );
 };

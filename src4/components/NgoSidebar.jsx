@@ -1,9 +1,10 @@
+
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import {
   LayoutDashboard,
   Building2,
-  BriefcaseBusiness,
   Users,
   LogOut,
   HeartHandshake,
@@ -34,14 +35,13 @@ const NgoSidebar = () => {
   ];
 
   const handleLogout = () => {
-    // Later connect this to your authentication/backend
     navigate("/");
   };
 
   return (
     <aside className="ngo_sidebar">
 
-      {/* Logo */}
+      {/* LOGO */}
       <div className="ngo_sidebar_logo">
 
         <div className="ngo_logo_icon">
@@ -56,18 +56,17 @@ const NgoSidebar = () => {
       </div>
 
 
-      {/* Navigation */}
+      {/* NAVIGATION */}
       <nav className="ngo_sidebar_nav">
 
         {menuItems.map((item) => {
-
           const Icon = item.icon;
 
           const isActive =
             location.pathname === item.path ||
             (
               item.path !== "/ngo-dashboard" &&
-              location.pathname.startsWith(item.path)
+              location.pathname.startsWith(item.path + "/")
             );
 
           return (
@@ -79,14 +78,9 @@ const NgoSidebar = () => {
               }`}
               onClick={() => navigate(item.path)}
             >
-
-              <Icon
-                size={22}
-                strokeWidth={2}
-              />
+              <Icon size={22} strokeWidth={2} />
 
               <span>{item.label}</span>
-
             </button>
           );
         })}
@@ -94,7 +88,7 @@ const NgoSidebar = () => {
       </nav>
 
 
-      {/* Bottom section */}
+      {/* BOTTOM SECTION */}
       <div className="ngo_sidebar_bottom">
 
         <button
@@ -102,14 +96,9 @@ const NgoSidebar = () => {
           className="ngo_sidebar_item ngo_logout"
           onClick={handleLogout}
         >
-
-          <LogOut
-            size={22}
-            strokeWidth={2}
-          />
+          <LogOut size={22} strokeWidth={2} />
 
           <span>Logout</span>
-
         </button>
 
       </div>

@@ -1,0 +1,494 @@
+
+.vr_page,
+.vr_page * {
+  box-sizing: border-box;
+}
+
+.vr_page {
+  width: 100%;
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 35px;
+}
+
+/* HEADER */
+
+.vr_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 25px;
+  margin-bottom: 28px;
+}
+
+.vr_header h1 {
+  margin: 0 0 7px;
+  color: rgb(27, 67, 39);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 36px;
+}
+
+.vr_header p {
+  margin: 0;
+  color: rgb(94, 96, 79);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* SEARCH */
+
+.vr_search {
+  width: min(400px, 100%);
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+  background: rgb(247, 243, 229);
+  border: 1px solid rgba(88, 117, 86, 0.22);
+  border-radius: 10px;
+}
+
+.vr_search svg {
+  flex-shrink: 0;
+  color: rgb(44, 72, 45);
+}
+
+.vr_search input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: rgb(44, 72, 45);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* FILTERS */
+
+.vr_filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.vr_filters button {
+  padding: 10px 18px;
+  border: 1px solid rgba(88, 117, 86, 0.3);
+  border-radius: 8px;
+  background: transparent;
+  color: rgb(44, 72, 45);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.vr_filters button:hover {
+  background: rgb(229, 232, 210);
+}
+
+.vr_filters button.active {
+  background: rgb(29, 113, 55);
+  border-color: rgb(29, 113, 55);
+  color: white;
+}
+
+/* REQUEST LIST */
+
+.vr_list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* REQUEST CARD */
+
+.vr_card {
+  width: 100%;
+  display: grid;
+  grid-template-columns:
+    minmax(220px, 0.9fr)
+    minmax(250px, 1.1fr)
+    minmax(290px, 1.15fr);
+  gap: 22px;
+  align-items: start;
+  padding: 23px;
+  background: rgb(247, 243, 229);
+  border: 1px solid rgba(88, 117, 86, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 3px 12px rgba(54, 70, 52, 0.07);
+}
+
+/* VOLUNTEER */
+
+.vr_volunteer {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.vr_avatar {
+  width: 70px;
+  height: 70px;
+  flex: 0 0 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(88, 117, 86, 0.25);
+}
+
+.vr_person {
+  min-width: 0;
+}
+
+.vr_person h3 {
+  margin: 2px 0 12px;
+  color: rgb(27, 67, 39);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+}
+
+.vr_contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vr_contact div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.vr_contact svg {
+  flex-shrink: 0;
+  color: rgb(44, 105, 55);
+}
+
+.vr_contact span {
+  min-width: 0;
+  color: rgb(84, 87, 73);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+/* APPLICATION DETAILS */
+
+.vr_middle {
+  min-width: 0;
+  padding-left: 20px;
+  border-left: 1px solid rgba(88, 117, 86, 0.16);
+}
+
+.vr_message h4,
+.vr_skills h4 {
+  margin: 0 0 8px;
+  color: rgb(27, 67, 39);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+}
+
+.vr_message p {
+  margin: 0 0 16px;
+  color: rgb(79, 82, 68);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.vr_skill_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.vr_skill_list span {
+  padding: 6px 11px;
+  border: 1px solid rgba(88, 117, 86, 0.14);
+  border-radius: 18px;
+  background: rgb(232, 232, 211);
+  color: rgb(46, 65, 45);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* RESPONSE AREA */
+
+.vr_response {
+  min-width: 0;
+  padding-left: 20px;
+  border-left: 1px solid rgba(88, 117, 86, 0.16);
+}
+
+.vr_response_top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+/* STATUS */
+
+.vr_status {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.vr_status.pending {
+  background: rgb(255, 229, 164);
+  color: rgb(177, 103, 10);
+}
+
+.vr_status.accepted {
+  background: rgb(205, 235, 194);
+  color: rgb(32, 103, 48);
+}
+
+.vr_status.rejected {
+  background: rgb(250, 211, 208);
+  color: rgb(185, 40, 32);
+}
+
+.vr_date {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: rgb(101, 101, 87);
+  font-size: 12px;
+}
+
+/* INLINE REPLY */
+
+.vr_response label {
+  display: block;
+  margin-bottom: 8px;
+  color: rgb(44, 72, 45);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.vr_response textarea {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  resize: vertical;
+  border: 1px solid rgba(88, 117, 86, 0.35);
+  border-radius: 9px;
+  outline: none;
+  background: white;
+  color: rgb(44, 72, 45);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.vr_response textarea:focus {
+  border-color: rgb(88, 117, 86);
+  box-shadow: 0 0 0 3px rgba(88, 117, 86, 0.12);
+}
+
+.vr_reply_hint {
+  margin: 7px 0 12px;
+  color: rgb(105, 105, 91);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* BUTTONS */
+
+.vr_buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vr_accept,
+.vr_reject,
+.vr_send_button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.vr_accept {
+  border: 1px solid rgb(29, 113, 55);
+  background: rgb(29, 113, 55);
+  color: white;
+}
+
+.vr_accept:hover:not(:disabled) {
+  background: rgb(22, 91, 44);
+}
+
+.vr_reject {
+  border: 1px solid rgb(220, 73, 66);
+  background: transparent;
+  color: rgb(190, 50, 43);
+}
+
+.vr_reject:hover:not(:disabled) {
+  background: rgb(255, 235, 233);
+}
+
+.vr_send_button {
+  border: 1px solid rgb(65, 91, 67);
+  background: rgb(65, 91, 67);
+  color: white;
+}
+
+.vr_send_button:hover:not(:disabled) {
+  background: rgb(44, 72, 45);
+}
+
+.vr_buttons button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* EMPTY STATE */
+
+.vr_empty {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35px;
+  background: rgb(247, 243, 229);
+  border-radius: 16px;
+  text-align: center;
+  color: rgb(44, 72, 45);
+}
+
+.vr_empty h2 {
+  margin: 15px 0 6px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.vr_empty p {
+  color: rgb(105, 105, 91);
+}
+
+/* TABLET */
+
+@media (max-width: 1150px) {
+  .vr_page {
+    padding: 30px 25px;
+  }
+
+  .vr_card {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vr_response {
+    grid-column: 1 / -1;
+    padding: 18px 0 0;
+    border-left: none;
+    border-top: 1px solid rgba(88, 117, 86, 0.16);
+  }
+
+  .vr_response_top {
+    justify-content: flex-start;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 750px) {
+  .vr_page {
+    padding: 25px 15px 40px;
+  }
+
+  .vr_header {
+    flex-direction: column;
+  }
+
+  .vr_header h1 {
+    font-size: 30px;
+  }
+
+  .vr_search {
+    width: 100%;
+  }
+
+  .vr_card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 18px;
+  }
+
+  .vr_middle {
+    width: 100%;
+    padding: 18px 0 0;
+    border-left: none;
+    border-top: 1px solid rgba(88, 117, 86, 0.16);
+  }
+
+  .vr_response {
+    width: 100%;
+    padding: 18px 0 0;
+    border-left: none;
+    border-top: 1px solid rgba(88, 117, 86, 0.16);
+  }
+
+  .vr_response_top {
+    justify-content: space-between;
+  }
+}
+
+/* SMALL MOBILE */
+
+@media (max-width: 450px) {
+  .vr_avatar {
+    width: 60px;
+    height: 60px;
+    flex-basis: 60px;
+  }
+
+  .vr_person h3 {
+    font-size: 18px;
+  }
+
+  .vr_filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vr_filters button {
+    padding: 9px 7px;
+    font-size: 12px;
+  }
+
+  .vr_buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vr_send_button {
+    grid-column: 1 / -1;
+  }
+}

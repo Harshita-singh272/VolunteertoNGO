@@ -17,45 +17,17 @@ import NgoSidebar from "../components/NgoSidebar.jsx";
 
 import "../styles/NgoProfile.css";
 
-
 const NgoProfile = ({ ngoData }) => {
   const navigate = useNavigate();
 
-
-  /*
-   * =====================================================
-   * TEMPORARY FRONTEND DATA
-   *
-   * Later this data will come from the backend.
-   *
-   * For now:
-   * 1. If ngoData is passed as a prop -> use it.
-   * 2. Otherwise check localStorage.
-   * 3. Otherwise use temporary default data.
-   * =====================================================
-   */
-
-  let savedNgoData = null;
-
-  try {
-    savedNgoData = JSON.parse(
-      localStorage.getItem("ngoProfileData")
-    );
-  } catch (error) {
-    savedNgoData = null;
-  }
-
-
-  const ngo = ngoData || savedNgoData || {
+  const ngo = ngoData || {
     id: 1,
 
-    organizationName:
-      "Helping Hands Foundation",
+    organizationName: "Helping Hands Foundation",
 
     logo: null,
 
-    location:
-      "Delhi",
+    location: "Delhi",
 
     causes: [
       "Education",
@@ -70,144 +42,92 @@ const NgoProfile = ({ ngoData }) => {
     mission:
       "To create equal opportunities for children and communities through education, support, and meaningful community programs.",
 
-    foundedYear:
-      "2015",
+    foundedYear: "2015",
 
-    organizationSize:
-      "11-50",
+    organizationSize: "11-50",
 
-    contactPersonName:
-      "Priya Sharma",
+    contactPersonName: "Priya Sharma",
 
-    contactPersonRole:
-      "Founder & Director",
+    contactPersonRole: "Founder & Director",
 
-    contactEmail:
-      "helpinghands@example.com",
+    contactEmail: "helpinghands@example.com",
 
-    contactPhone:
-      "+91 98765 43210",
+    contactPhone: "+91 98765 43210",
 
-    website:
-      "",
+    website: "www.helpinghands.org",
 
-    socialLink:
-      "",
+    socialLink: "@helpinghands",
 
     programs:
-      "Education programs, community support, and animal welfare initiatives.",
+      "Educational workshops, learning resource distribution, community development programs, and mentorship.",
 
     volunteerHelp:
-      "Volunteers can support educational activities, community programs, and outreach work.",
+      "Volunteers can help with teaching, mentoring, event organization, communication, and community activities.",
 
     currentNeeds:
-      "Teaching volunteers, community support volunteers, and event volunteers.",
+      "Teaching volunteers, educational materials, community outreach support, and event volunteers.",
   };
-
-
-  /*
-   * =====================================================
-   * EDIT PROFILE
-   * =====================================================
-   */
 
   const handleEditProfile = () => {
     navigate("/ngo/profile/edit");
   };
 
-
-  /*
-   * =====================================================
-   * LOGO
-   * =====================================================
-   */
-
-  const renderLogo = () => {
-    if (
-      ngo.logo &&
-      typeof ngo.logo === "string"
-    ) {
-      return (
-        <img
-          src={ngo.logo}
-          alt={`${ngo.organizationName} logo`}
-          onError={(event) => {
-            event.currentTarget.style.display =
-              "none";
-          }}
-        />
-      );
-    }
-
-    return (
-      <div className="ngo_profile_logo_placeholder">
-        {ngo.organizationName
-          ? ngo.organizationName
-              .charAt(0)
-              .toUpperCase()
-          : "N"}
-      </div>
-    );
-  };
-
-
   return (
     <div className="ngo_profile_layout">
 
-      {/* =================================================
-          NGO SIDEBAR
-      ================================================= */}
-
       <NgoSidebar />
-
-
-      {/* =================================================
-          MAIN
-      ================================================= */}
 
       <main className="ngo_profile_main">
 
-        <div className="ngo_profile_page">
+        {/* =====================================================
+            COMPLETELY UNIQUE NGO OWNER PROFILE ROOT
+        ===================================================== */}
 
+        <div className="owner_ngo_page">
 
-          {/* =================================================
-              TOP ACTIONS
-          ================================================= */}
+          {/* =====================================================
+              EDIT BUTTON
+          ===================================================== */}
 
-          <div className="ngo_profile_actions">
-
-            <div />
+          <div className="owner_ngo_actions">
 
             <button
               type="button"
-              className="ngo_profile_edit"
+              className="owner_ngo_edit_button"
               onClick={handleEditProfile}
             >
               <Pencil size={17} />
-
               Edit Profile
             </button>
 
           </div>
 
 
-          {/* =================================================
-              PROFILE HEADER
-          ================================================= */}
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
 
-          <section className="ngo_profile_header">
+          <section className="owner_ngo_header">
 
+            <div className="owner_ngo_logo">
 
-            {/* LOGO */}
+              {ngo.logo ? (
+                <img
+                  src={ngo.logo}
+                  alt={`${ngo.organizationName} logo`}
+                />
+              ) : (
+                <div className="owner_ngo_logo_placeholder">
+                  {ngo.organizationName
+                    ?.charAt(0)
+                    .toUpperCase() || "N"}
+                </div>
+              )}
 
-            <div className="ngo_profile_logo">
-              {renderLogo()}
             </div>
 
 
-            {/* IDENTITY */}
-
-            <div className="ngo_profile_identity">
+            <div className="owner_ngo_identity">
 
               <h1>
                 {ngo.organizationName ||
@@ -215,57 +135,60 @@ const NgoProfile = ({ ngoData }) => {
               </h1>
 
 
-              <div className="ngo_profile_location">
+              <div className="owner_ngo_location">
 
                 <MapPin size={18} />
 
                 <span>
                   {ngo.location ||
-                    "Location not added"}
+                    "Location not provided"}
                 </span>
 
               </div>
 
 
-              {/* CAUSES */}
+              {ngo.causes &&
+                ngo.causes.length > 0 && (
 
-              <div className="ngo_profile_causes">
+                  <div className="owner_ngo_causes">
 
-                {ngo.causes?.map((cause) => (
-                  <span
-                    key={cause}
-                    className="ngo_profile_cause"
-                  >
-                    {cause}
-                  </span>
-                ))}
+                    {ngo.causes.map((cause) => (
+                      <span
+                        key={cause}
+                        className="owner_ngo_cause"
+                      >
+                        {cause}
+                      </span>
+                    ))}
 
-              </div>
+                  </div>
+
+                )}
 
             </div>
 
           </section>
 
 
-          {/* =================================================
-              CONTENT
-          ================================================= */}
+          {/* =====================================================
+              MAIN CONTENT
+          ===================================================== */}
 
-          <div className="ngo_profile_content">
+          <div className="owner_ngo_content">
 
 
             {/* =================================================
                 LEFT COLUMN
             ================================================= */}
 
-            <div className="ngo_profile_left">
+            <div className="owner_ngo_left">
 
 
               {/* ABOUT */}
 
-              <section className="ngo_profile_card">
+              <section className="owner_ngo_card">
 
-                <div className="ngo_card_title">
+                <div className="owner_ngo_card_title">
 
                   <Target size={21} />
 
@@ -274,7 +197,6 @@ const NgoProfile = ({ ngoData }) => {
                   </h2>
 
                 </div>
-
 
                 <p>
                   {ngo.description ||
@@ -286,9 +208,9 @@ const NgoProfile = ({ ngoData }) => {
 
               {/* MISSION */}
 
-              <section className="ngo_profile_card">
+              <section className="owner_ngo_card">
 
-                <div className="ngo_card_title">
+                <div className="owner_ngo_card_title">
 
                   <Heart size={21} />
 
@@ -297,7 +219,6 @@ const NgoProfile = ({ ngoData }) => {
                   </h2>
 
                 </div>
-
 
                 <p>
                   {ngo.mission ||
@@ -309,9 +230,9 @@ const NgoProfile = ({ ngoData }) => {
 
               {/* PROGRAMS */}
 
-              <section className="ngo_profile_card">
+              <section className="owner_ngo_card">
 
-                <div className="ngo_card_title">
+                <div className="owner_ngo_card_title">
 
                   <Target size={21} />
 
@@ -320,7 +241,6 @@ const NgoProfile = ({ ngoData }) => {
                   </h2>
 
                 </div>
-
 
                 <p>
                   {ngo.programs ||
@@ -332,9 +252,9 @@ const NgoProfile = ({ ngoData }) => {
 
               {/* VOLUNTEER HELP */}
 
-              <section className="ngo_profile_card">
+              <section className="owner_ngo_card">
 
-                <div className="ngo_card_title">
+                <div className="owner_ngo_card_title">
 
                   <Users size={21} />
 
@@ -343,7 +263,6 @@ const NgoProfile = ({ ngoData }) => {
                   </h2>
 
                 </div>
-
 
                 <p>
                   {ngo.volunteerHelp ||
@@ -355,9 +274,9 @@ const NgoProfile = ({ ngoData }) => {
 
               {/* CURRENT NEEDS */}
 
-              <section className="ngo_profile_card">
+              <section className="owner_ngo_card">
 
-                <div className="ngo_card_title">
+                <div className="owner_ngo_card_title">
 
                   <Heart size={21} />
 
@@ -366,7 +285,6 @@ const NgoProfile = ({ ngoData }) => {
                   </h2>
 
                 </div>
-
 
                 <p>
                   {ngo.currentNeeds ||
@@ -378,9 +296,9 @@ const NgoProfile = ({ ngoData }) => {
 
               {/* AREAS OF WORK */}
 
-              <section className="ngo_profile_card">
+              <section className="owner_ngo_card">
 
-                <div className="ngo_card_title">
+                <div className="owner_ngo_card_title">
 
                   <Target size={21} />
 
@@ -391,16 +309,17 @@ const NgoProfile = ({ ngoData }) => {
                 </div>
 
 
-                <div className="ngo_profile_causes ngo_profile_causes_large">
+                <div className="owner_ngo_causes">
 
-                  {ngo.causes?.map((cause) => (
-                    <span
-                      key={cause}
-                      className="ngo_profile_cause"
-                    >
-                      {cause}
-                    </span>
-                  ))}
+                  {ngo.causes &&
+                    ngo.causes.map((cause) => (
+                      <span
+                        key={cause}
+                        className="owner_ngo_cause"
+                      >
+                        {cause}
+                      </span>
+                    ))}
 
                 </div>
 
@@ -413,22 +332,22 @@ const NgoProfile = ({ ngoData }) => {
                 RIGHT COLUMN
             ================================================= */}
 
-            <div className="ngo_profile_right">
+            <aside className="owner_ngo_right">
 
 
               {/* ORGANIZATION DETAILS */}
 
-              <section className="ngo_profile_card">
+              <section className="owner_ngo_card">
 
-                <h2 className="ngo_side_title">
+                <h2 className="owner_ngo_side_title">
                   Organization Details
                 </h2>
 
 
-                <div className="ngo_detail_list">
+                <div className="owner_ngo_detail_list">
 
 
-                  <div className="ngo_detail_item">
+                  <div className="owner_ngo_detail_item">
 
                     <CalendarDays size={18} />
 
@@ -448,7 +367,7 @@ const NgoProfile = ({ ngoData }) => {
                   </div>
 
 
-                  <div className="ngo_detail_item">
+                  <div className="owner_ngo_detail_item">
 
                     <Users size={18} />
 
@@ -468,7 +387,7 @@ const NgoProfile = ({ ngoData }) => {
                   </div>
 
 
-                  <div className="ngo_detail_item">
+                  <div className="owner_ngo_detail_item">
 
                     <MapPin size={18} />
 
@@ -487,7 +406,6 @@ const NgoProfile = ({ ngoData }) => {
 
                   </div>
 
-
                 </div>
 
               </section>
@@ -495,19 +413,17 @@ const NgoProfile = ({ ngoData }) => {
 
               {/* CONTACT INFORMATION */}
 
-              <section className="ngo_profile_card">
+              <section className="owner_ngo_card">
 
-                <h2 className="ngo_side_title">
+                <h2 className="owner_ngo_side_title">
                   Contact Information
                 </h2>
 
 
-                <div className="ngo_detail_list">
+                <div className="owner_ngo_detail_list">
 
 
-                  {/* CONTACT PERSON */}
-
-                  <div className="ngo_detail_item">
+                  <div className="owner_ngo_detail_item">
 
                     <Users size={18} />
 
@@ -533,9 +449,7 @@ const NgoProfile = ({ ngoData }) => {
                   </div>
 
 
-                  {/* EMAIL */}
-
-                  <div className="ngo_detail_item">
+                  <div className="owner_ngo_detail_item">
 
                     <Mail size={18} />
 
@@ -555,9 +469,7 @@ const NgoProfile = ({ ngoData }) => {
                   </div>
 
 
-                  {/* PHONE */}
-
-                  <div className="ngo_detail_item">
+                  <div className="owner_ngo_detail_item">
 
                     <Phone size={18} />
 
@@ -577,57 +489,50 @@ const NgoProfile = ({ ngoData }) => {
                   </div>
 
 
-                  {/* WEBSITE */}
+                  <div className="owner_ngo_detail_item">
 
-                  {ngo.website && (
-                    <div className="ngo_detail_item">
+                    <Globe size={18} />
 
-                      <Globe size={18} />
+                    <div>
 
-                      <div>
+                      <span>
+                        Website
+                      </span>
 
-                        <span>
-                          Website
-                        </span>
-
-                        <strong>
-                          {ngo.website}
-                        </strong>
-
-                      </div>
+                      <strong>
+                        {ngo.website ||
+                          "Not provided"}
+                      </strong>
 
                     </div>
-                  )}
+
+                  </div>
 
 
-                  {/* SOCIAL LINK */}
+                  <div className="owner_ngo_detail_item">
 
-                  {ngo.socialLink && (
-                    <div className="ngo_detail_item">
+                    <Globe size={18} />
 
-                      <Globe size={18} />
+                    <div>
 
-                      <div>
+                      <span>
+                        Social Media
+                      </span>
 
-                        <span>
-                          Social Media
-                        </span>
-
-                        <strong>
-                          {ngo.socialLink}
-                        </strong>
-
-                      </div>
+                      <strong>
+                        {ngo.socialLink ||
+                          "Not provided"}
+                      </strong>
 
                     </div>
-                  )}
+
+                  </div>
 
                 </div>
 
               </section>
 
-
-            </div>
+            </aside>
 
           </div>
 
@@ -638,6 +543,5 @@ const NgoProfile = ({ ngoData }) => {
     </div>
   );
 };
-
 
 export default NgoProfile;

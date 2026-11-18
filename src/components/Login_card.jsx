@@ -1,9 +1,19 @@
+
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "../styles/Login_card.css";
+
 import loginImage from "../assets/backg.jpg";
 import loginsticker from "../assets/sticker.png";
-import React, { useState } from "react";
+
+// Backend URL
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const AuthForm = ({ type }) => {
+  const navigate = useNavigate();
+
   const isLogin = type === "login";
 
   const [formData, setFormData] = useState({
@@ -15,8 +25,9 @@ const AuthForm = ({ type }) => {
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Handles all input changes
+  // HANDLE INPUT CHANGES
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -24,57 +35,152 @@ const AuthForm = ({ type }) => {
       ...previousData,
       [name]: value,
     }));
+
+    setError("");
   };
 
+  // REDIRECT ACCORDING TO USER ROLE
+  const redirectUser = (role) => {
+    if (role === "volunteer") {
+      navigate("/volunteer-dashboard");
+    } else if (role === "ngo") {
+      navigate("/ngo-dashboard");
+    } else {
+      setError("Invalid account role received from server.");
+    }
+  };
+
+  // HANDLE LOGIN AND SIGNUP
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     setError("");
+    setLoading(true);
 
-    // LOGIN
-    if (isLogin) {
-      const loginData = {
-        email: formData.email,
-        password: formData.password,
-      };
+    try {
+      let endpoint;
+      let requestData;
 
-      console.log("Login Data:", loginData);
+      // =================================
+      // LOGIN
+      // =================================
 
-      // Backend connection will come here later
-      // POST /api/auth/login
+      if (isLogin) {
+        endpoint = "/api/auth/login";
 
-      return;
+        requestData = {
+          email: formData.email.trim(),
+          password: formData.password,
+        };
+      }
+
+      // =================================
+      // SIGNUP
+      // =================================
+
+      else {
+        if (formData.password !== formData.confirmPassword) {
+          setError("Passwords do not match.");
+          setLoading(false);
+          return;
+        }
+
+        if (!formData.role) {
+          setError("Please select your account role.");
+          setLoading(false);
+          return;
+        }
+
+        requestData = {
+          role: formData.role,
+          username: formData.username.trim(),
+          email: formData.email.trim(),
+          password: formData.password,
+        };
+
+        endpoint = "/api/auth/signup";
+      }
+
+      // =================================
+      // SEND REQUEST TO BACKEND
+      // =================================
+
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(requestData),
+      });
+
+      const data = await response.json();
+
+      // =================================
+      // HANDLE BACKEND ERRORS
+      // =================================
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Something went wrong. Please try again."
+        );
+      }
+
+      // =================================
+      // GET USER INFORMATION
+      // =================================
+
+      const user = data.user || data;
+
+      const role = user.role?.toLowerCase();
+
+      if (role !== "volunteer" && role !== "ngo") {
+        throw new Error(
+          "The server did not return a valid user role."
+        );
+      }
+
+      // =================================
+      // SAVE AUTHENTICATION INFORMATION
+      // =================================
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // =================================
+      // REDIRECT USER
+      // =================================
+
+      redirectUser(role);
+
+    } catch (error) {
+      console.error("Authentication error:", error);
+
+      setError(
+        error.message || "Unable to connect to the server."
+      );
+    } finally {
+      setLoading(false);
     }
-
-    // SIGN UP
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    const signupData = {
-      role: formData.role,
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-    };
-
-    console.log("Signup Data:", signupData);
-
-    // Backend connection will come here later
-    // POST /api/auth/signup
   };
 
   return (
     <div
       className="login_card"
-      style={{ backgroundImage: `url("${loginImage}")` }}
+      style={{
+        backgroundImage: `url("${loginImage}")`,
+      }}
     >
       <h1>
         {isLogin ? "Welcome Back" : "Join Us"}
       </h1>
 
       <div className="login_content">
+
         <img
           src={loginsticker}
           alt="Login"
@@ -92,7 +198,7 @@ const AuthForm = ({ type }) => {
             onSubmit={handleSubmit}
           >
 
-            {/* SIGN UP ONLY - ROLE */}
+            {/* SIGNUP ROLE */}
             {!isLogin && (
               <>
                 <div>
@@ -122,7 +228,10 @@ const AuthForm = ({ type }) => {
                     </option>
                   </select>
                 </div>
+
                 <br />
+
+                {/* USERNAME */}
                 <div>
                   <label htmlFor="username">
                     Username:
@@ -140,14 +249,19 @@ const AuthForm = ({ type }) => {
                     required
                   />
                 </div>
+
                 <br />
               </>
             )}
+
+            {/* EMAIL */}
             <div>
               <label htmlFor="email">
                 Email:
               </label>
+
               <br />
+
               <input
                 id="email"
                 name="email"
@@ -158,12 +272,17 @@ const AuthForm = ({ type }) => {
                 required
               />
             </div>
+
             <br />
+
+            {/* PASSWORD */}
             <div>
               <label htmlFor="password">
                 Password:
               </label>
+
               <br />
+
               <input
                 id="password"
                 name="password"
@@ -174,14 +293,19 @@ const AuthForm = ({ type }) => {
                 required
               />
             </div>
+
+            {/* CONFIRM PASSWORD */}
             {!isLogin && (
               <>
                 <br />
+
                 <div>
                   <label htmlFor="confirmPassword">
                     Confirm Password:
                   </label>
+
                   <br />
+
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -194,17 +318,31 @@ const AuthForm = ({ type }) => {
                 </div>
               </>
             )}
+
+            {/* ERROR MESSAGE */}
             {error && (
-              <>
-                <br />
-                <p>{error}</p>
-              </>
+              <p
+                className="auth_error"
+                role="alert"
+              >
+                {error}
+              </p>
             )}
+
             <br />
-            <br />
-            <button type="submit">
-              {isLogin ? "Login" : "Sign Up"}
+
+            {/* SUBMIT BUTTON */}
+            <button
+              type="submit"
+              disabled={loading}
+            >
+              {loading
+                ? "Please wait..."
+                : isLogin
+                  ? "Login"
+                  : "Sign Up"}
             </button>
+
           </form>
         </div>
       </div>
@@ -213,4 +351,3 @@ const AuthForm = ({ type }) => {
 };
 
 export default AuthForm;
-

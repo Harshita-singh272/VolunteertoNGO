@@ -1,12 +1,33 @@
-.ngo_profile_page {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 35px 45px 60px;
+/* =========================================================
+   VOLUNTEER NGO PUBLIC PROFILE
+   All classes are uniquely prefixed with "vol_ngo_"
+   to prevent conflicts with the NGO preview page.
+   ========================================================= */
+
+.vol_ngo_profile_page,
+.vol_ngo_profile_page * {
   box-sizing: border-box;
 }
 
-.ngo_back_button {
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
+
+.vol_ngo_profile_page {
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 30px 35px 60px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.vol_ngo_back_button {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -30,17 +51,25 @@
     border-color 0.2s ease;
 }
 
-.ngo_back_button:hover {
+.vol_ngo_back_button:hover {
   background-color: rgb(229, 232, 210);
   border-color: rgb(88, 117, 86);
 }
 
-.ngo_profile_header {
+
+/* =========================================================
+   NGO HEADER
+   ========================================================= */
+
+.vol_ngo_profile_header {
+  width: 100%;
+
   display: flex;
   align-items: center;
+
   gap: 30px;
 
-  padding: 35px;
+  padding: 30px;
 
   background-color: rgb(247, 243, 229);
 
@@ -48,17 +77,19 @@
   border-radius: 18px;
 
   box-shadow:
-    4px 8px 22px
-    rgba(54, 70, 52, 0.12);
-
-  box-sizing: border-box;
+    4px 8px 22px rgba(54, 70, 52, 0.12);
 }
 
-.ngo_profile_logo {
+
+/* =========================================================
+   NGO LOGO
+   ========================================================= */
+
+.vol_ngo_profile_logo {
   width: 125px;
   height: 125px;
 
-  flex-shrink: 0;
+  flex: 0 0 125px;
 
   display: flex;
   align-items: center;
@@ -72,13 +103,16 @@
   border-radius: 16px;
 }
 
-.ngo_profile_logo img {
+.vol_ngo_profile_logo img {
+  display: block;
+
   width: 100%;
   height: 100%;
+
   object-fit: contain;
 }
 
-.ngo_logo_placeholder {
+.vol_ngo_logo_placeholder {
   width: 100%;
   height: 100%;
 
@@ -94,56 +128,84 @@
   font-weight: 700;
 }
 
-.ngo_profile_identity {
+
+/* =========================================================
+   NGO IDENTITY
+   ========================================================= */
+
+.vol_ngo_profile_identity {
   flex: 1;
   min-width: 0;
 }
 
-.ngo_profile_title {
+.vol_ngo_profile_title {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+
+  min-width: 0;
+
   gap: 12px;
 }
 
-.ngo_profile_title h1 {
+.vol_ngo_profile_title h1 {
   margin: 0;
 
+  max-width: 100%;
+
   font-family: Georgia, "Times New Roman", serif;
+
   font-size: 36px;
   line-height: 1.2;
 
   color: rgb(44, 72, 45);
+
+  overflow-wrap: anywhere;
 }
 
-.ngo_profile_location {
+
+/* =========================================================
+   LOCATION
+   ========================================================= */
+
+.vol_ngo_profile_location {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+
   gap: 7px;
 
   margin-top: 12px;
 
   color: rgb(89, 93, 78);
+
   font-size: 15px;
 }
 
-.ngo_profile_location svg {
+.vol_ngo_profile_location svg {
   flex-shrink: 0;
+
   color: rgb(88, 117, 86);
 }
 
-.ngo_profile_causes {
+
+/* =========================================================
+   CAUSES
+   ========================================================= */
+
+.vol_ngo_profile_causes {
   display: flex;
   flex-wrap: wrap;
+
   gap: 8px;
 
   margin-top: 18px;
 }
 
-.ngo_cause_tag {
+.vol_ngo_cause_tag {
   display: inline-flex;
   align-items: center;
+
+  max-width: 100%;
 
   padding: 7px 12px;
 
@@ -154,30 +216,58 @@
 
   font-size: 13px;
   font-weight: 600;
+
+  overflow-wrap: anywhere;
 }
 
-.ngo_profile_content {
+
+/* =========================================================
+   MAIN CONTENT GRID
+   ========================================================= */
+
+.vol_ngo_profile_content {
+  width: 100%;
+  min-width: 0;
+
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1.7fr)
-    minmax(280px, 0.9fr);
+    minmax(0, 1.65fr)
+    minmax(300px, 0.85fr);
 
-  gap: 25px;
+  gap: 24px;
+
+  align-items: start;
 
   margin-top: 25px;
 }
 
-.ngo_profile_left,
-.ngo_profile_right {
-  display: flex;
-  flex-direction: column;
+
+/* =========================================================
+   LEFT + RIGHT COLUMNS
+   ========================================================= */
+
+.vol_ngo_profile_left,
+.vol_ngo_profile_right {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+
   gap: 20px;
 
-  min-width: 0;
+  align-content: start;
 }
 
-.ngo_info_card {
+
+/* =========================================================
+   INFORMATION CARDS
+   ========================================================= */
+
+.vol_ngo_info_card {
+  width: 100%;
+  min-width: 0;
+
   padding: 28px;
 
   background-color: rgb(247, 243, 229);
@@ -186,23 +276,21 @@
   border-radius: 15px;
 
   box-shadow:
-    3px 6px 18px
-    rgba(54, 70, 52, 0.08);
-
-  box-sizing: border-box;
+    3px 6px 18px rgba(54, 70, 52, 0.08);
 }
 
-.ngo_info_card h2 {
+.vol_ngo_info_card h2 {
   margin: 0 0 15px;
 
   font-family: Georgia, "Times New Roman", serif;
+
   font-size: 23px;
   line-height: 1.3;
 
   color: rgb(44, 72, 45);
 }
 
-.ngo_info_card p {
+.vol_ngo_info_card p {
   margin: 0;
 
   color: rgb(86, 88, 74);
@@ -211,71 +299,114 @@
   line-height: 1.75;
 
   white-space: pre-line;
+
+  overflow-wrap: anywhere;
 }
 
-.ngo_card_heading {
+
+/* =========================================================
+   CARD HEADING WITH ICON
+   ========================================================= */
+
+.vol_ngo_card_heading {
   display: flex;
   align-items: center;
+
   gap: 9px;
 
   margin-bottom: 15px;
 }
 
-.ngo_card_heading svg {
+.vol_ngo_card_heading svg {
   flex-shrink: 0;
+
   color: rgb(88, 117, 86);
 }
 
-.ngo_card_heading h2 {
+.vol_ngo_card_heading h2 {
   margin: 0;
 }
 
-.ngo_detail_list {
-  display: flex;
-  flex-direction: column;
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.vol_ngo_detail_list {
+  width: 100%;
+
+  display: grid;
+
   gap: 20px;
+
+  align-content: start;
 }
 
-.ngo_detail_item {
+.vol_ngo_detail_item {
+  width: 100%;
+  min-width: 0;
+
   display: flex;
   align-items: flex-start;
+
   gap: 12px;
 }
 
-.ngo_detail_item > svg {
-  flex-shrink: 0;
+.vol_ngo_detail_item > svg {
+  flex: 0 0 auto;
 
   margin-top: 2px;
 
   color: rgb(88, 117, 86);
 }
 
-.ngo_detail_item div {
+.vol_ngo_detail_item > div {
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
+
   gap: 4px;
 }
 
-.ngo_detail_item span {
+.vol_ngo_detail_item span {
   font-size: 12px;
+
   color: rgb(110, 110, 94);
 }
 
-.ngo_detail_item strong {
+.vol_ngo_detail_item strong {
+  max-width: 100%;
+
   font-size: 14px;
   line-height: 1.4;
 
   color: rgb(50, 63, 48);
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
-.ngo_detail_item small {
+.vol_ngo_detail_item small {
   font-size: 12px;
+
   color: rgb(105, 105, 91);
+
+  overflow-wrap: anywhere;
 }
 
-.ngo_save_card {
+
+/* =========================================================
+   SAVE NGO CARD
+   ========================================================= */
+
+.vol_ngo_save_card {
+  width: 100%;
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
+
   gap: 12px;
 
   padding: 24px;
@@ -283,34 +414,42 @@
   background-color: rgb(229, 232, 210);
 
   border-radius: 15px;
-
-  box-sizing: border-box;
 }
 
-.ngo_save_card > svg {
+.vol_ngo_save_card > svg {
+  flex-shrink: 0;
+
   color: rgb(88, 117, 86);
 }
 
-.ngo_save_card h3 {
+.vol_ngo_save_card h3 {
   margin: 0 0 5px;
 
   font-family: Georgia, "Times New Roman", serif;
+
   font-size: 20px;
   line-height: 1.3;
 
   color: rgb(44, 72, 45);
 }
 
-.ngo_save_card p {
+.vol_ngo_save_card p {
   margin: 0;
 
   color: rgb(84, 88, 72);
 
   font-size: 13px;
   line-height: 1.5;
+
+  overflow-wrap: anywhere;
 }
 
-.ngo_save_button {
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+.vol_ngo_save_button {
   width: 100%;
 
   padding: 11px 15px;
@@ -331,27 +470,34 @@
     color 0.2s ease;
 }
 
-.ngo_save_button:hover {
+.vol_ngo_save_button:hover {
   background-color: rgb(88, 117, 86);
   color: white;
 }
 
-.ngo_save_button.saved {
+.vol_ngo_save_button.saved {
   border-color: rgb(190, 40, 40);
+
   background-color: transparent;
   color: rgb(190, 40, 40);
 }
 
-.ngo_save_button.saved:hover {
+.vol_ngo_save_button.saved:hover {
   background-color: rgb(255, 235, 235);
 }
 
-.ngo_save_card.ngo_saved {
+.vol_ngo_save_card.vol_ngo_saved {
   background-color: rgb(238, 232, 218);
 }
 
-.ngo_request_button {
+
+/* =========================================================
+   REQUEST BUTTON
+   ========================================================= */
+
+.vol_ngo_request_button {
   margin-top: 18px;
+
   padding: 11px 18px;
 
   border: none;
@@ -370,102 +516,125 @@
     transform 0.2s ease;
 }
 
-.ngo_request_button:hover {
+.vol_ngo_request_button:hover {
   background-color: rgb(66, 91, 64);
+
   transform: translateY(-1px);
 }
 
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
 @media (max-width: 950px) {
-  .ngo_profile_page {
+  .vol_ngo_profile_page {
     padding: 30px 25px 50px;
   }
 
-  .ngo_profile_content {
+  .vol_ngo_profile_content {
     grid-template-columns: 1fr;
   }
 
-  .ngo_profile_right {
-    display: grid;
+  .vol_ngo_profile_right {
     grid-template-columns: 1fr 1fr;
-    align-items: start;
   }
 }
 
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 650px) {
-  .ngo_profile_page {
+  .vol_ngo_profile_page {
     padding: 25px 15px 40px;
   }
 
-  .ngo_profile_header {
+  .vol_ngo_profile_header {
     flex-direction: column;
     align-items: flex-start;
+
     padding: 25px;
   }
 
-  .ngo_profile_logo {
+  .vol_ngo_profile_logo {
     width: 100px;
     height: 100px;
+
+    flex-basis: 100px;
   }
 
-  .ngo_profile_title h1 {
+  .vol_ngo_profile_title h1 {
     font-size: 28px;
   }
 
-  .ngo_profile_content {
-    display: flex;
-    flex-direction: column;
+  .vol_ngo_profile_content {
+    grid-template-columns: 1fr;
+
     gap: 15px;
   }
 
-  .ngo_profile_right {
-    display: flex;
-    flex-direction: column;
+  .vol_ngo_profile_right {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
-  .ngo_info_card {
+  .vol_ngo_info_card {
     padding: 22px;
   }
 
-  .ngo_info_card h2 {
+  .vol_ngo_info_card h2 {
     font-size: 21px;
   }
 
-  .ngo_profile_location {
+  .vol_ngo_profile_location {
     font-size: 14px;
+  }
+
+  .vol_ngo_request_button {
+    width: 100%;
   }
 }
 
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
 @media (max-width: 430px) {
-  .ngo_profile_header {
+  .vol_ngo_profile_header {
     padding: 20px;
   }
 
-  .ngo_profile_logo {
+  .vol_ngo_profile_logo {
     width: 85px;
     height: 85px;
+
+    flex-basis: 85px;
   }
 
-  .ngo_logo_placeholder {
+  .vol_ngo_logo_placeholder {
     font-size: 36px;
   }
 
-  .ngo_profile_title h1 {
+  .vol_ngo_profile_title h1 {
     font-size: 25px;
   }
 
-  .ngo_info_card {
+  .vol_ngo_info_card {
     padding: 18px;
   }
 
-  .ngo_info_card h2 {
+  .vol_ngo_info_card h2 {
     font-size: 20px;
   }
 
-  .ngo_info_card p {
+  .vol_ngo_info_card p {
     font-size: 14px;
   }
 
-  .ngo_request_button {
+  .vol_ngo_request_button {
     width: 100%;
   }
 }
