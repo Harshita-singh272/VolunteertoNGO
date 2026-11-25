@@ -1,3 +1,4 @@
+
 .ngo_sidebar {
   width: 285px;
   min-height: 100vh;
@@ -13,35 +14,18 @@
 .ngo_sidebar_logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 5px 8px 35px;
-}
-
-.ngo_logo_icon {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background-color: #dcebd2;
-  color: #1d7138;
+  padding: 5px 4px 35px;
+  min-height: 115px;
+  box-sizing: border-box;
 }
 
-.ngo_logo_text h2 {
-  margin: 0;
-  color: #174d32;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 19px;
-  line-height: 1.2;
-}
-
-.ngo_logo_text p {
-  margin: 5px 0 0;
-  color: #647067;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 12px;
+.ngo_sidebar_logo_image {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  height: 90px;
+  object-fit: contain;
 }
 
 .ngo_sidebar_nav {
@@ -66,9 +50,7 @@
   font-size: 16px;
   text-align: left;
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .ngo_sidebar_item svg {
@@ -89,8 +71,8 @@
 }
 
 .ngo_sidebar_bottom {
-  margin-top: auto;
-  padding-top: 25px;
+  margin-top: 20px;
+  padding-top: 18px;
   border-top: 1px solid #d1dac9;
 }
 
@@ -108,12 +90,13 @@
     padding: 25px 14px;
   }
 
-  .ngo_logo_text h2 {
-    font-size: 16px;
+  .ngo_sidebar_logo {
+    min-height: 100px;
   }
 
-  .ngo_logo_text p {
-    font-size: 11px;
+  .ngo_sidebar_logo_image {
+    max-width: 190px;
+    height: 75px;
   }
 
   .ngo_sidebar_item {
@@ -130,10 +113,12 @@
   .ngo_sidebar_logo {
     justify-content: center;
     padding: 5px 0 30px;
+    min-height: 75px;
   }
 
-  .ngo_logo_text {
-    display: none;
+  .ngo_sidebar_logo_image {
+    width: 60px;
+    height: 55px;
   }
 
   .ngo_sidebar_item {
@@ -147,5 +132,108 @@
 
   .ngo_sidebar_bottom {
     padding-top: 20px;
+  }
+}
+
+.ngo_logout_overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 35, 25, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.ngo_logout_dialog {
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  padding: 28px;
+  background: #ffffff;
+  border-radius: 14px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+}
+
+.ngo_logout_close {
+  position: absolute;
+  top: 13px;
+  right: 15px;
+  border: none;
+  background: transparent;
+  color: #647067;
+  cursor: pointer;
+}
+
+.ngo_logout_icon {
+  color: #1d7138;
+  margin-bottom: 12px;
+}
+
+.ngo_logout_dialog h2 {
+  margin: 0 0 10px;
+  color: #174d32;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+}
+
+.ngo_logout_dialog p {
+  margin: 0 0 24px;
+  color: #647067;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ngo_logout_actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.ngo_logout_cancel,
+.ngo_logout_confirm {
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.ngo_logout_cancel {
+  border: 1px solid #d1dac9;
+  background: #ffffff;
+  color: #26382b;
+}
+
+.ngo_logout_cancel:hover {
+  background: #eef3e6;
+}
+
+.ngo_logout_confirm {
+  border: none;
+  background: #176b35;
+  color: #ffffff;
+}
+
+.ngo_logout_confirm:hover {
+  background: #105127;
+}
+
+@media (max-width: 450px) {
+  .ngo_logout_dialog {
+    padding: 25px 18px;
+  }
+
+  .ngo_logout_actions {
+    gap: 8px;
+  }
+
+  .ngo_logout_cancel,
+  .ngo_logout_confirm {
+    padding: 10px 16px;
   }
 }

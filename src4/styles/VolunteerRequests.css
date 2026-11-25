@@ -131,14 +131,21 @@
   align-items: flex-start;
   gap: 14px;
 }
-
 .vr_avatar {
-  width: 70px;
-  height: 70px;
-  flex: 0 0 70px;
+  width: 66px;
+  height: 66px;
+  min-width: 66px;
   border-radius: 50%;
+  border: 1px solid #d4d4c4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   object-fit: cover;
-  border: 2px solid rgba(88, 117, 86, 0.25);
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .vr_person {

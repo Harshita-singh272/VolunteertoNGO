@@ -1,152 +1,178 @@
+
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import {
   LayoutDashboard,
-  Search,
   MapPin,
-  Building2,
-  Award,
-  Bell,
+  Users,
   User,
-  LogOut,
-  ChevronDown,
-  ChevronUp,
   Heart,
   FileText,
+  Bell,
+  LogOut,
+  X,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
+import logo from "../../src/assets/logo_image.png";
 import "../styles/VolunteerSidebar.css";
 
 const VolunteerSidebar = () => {
-  const [discoverOpen, setDiscoverOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+  const menuItems = [
+    {
+      label: "Dashboard",
+      icon: LayoutDashboard,
+      path: "/volunteer-dashboard",
+    },
+    {
+      label: "Nearby NGOs",
+      icon: MapPin,
+      path: "/nearby-ngos",
+    },
+    {
+      label: "Browse All NGOs",
+      icon: Users,
+      path: "/browse-ngos",
+    },
+    {
+      label: "My Profile",
+      icon: User,
+      path: "/volunteer-profile",
+    },
+    {
+      label: "My Experience",
+      icon: FileText,
+      path: "/volunteer/experience",
+    },
+    {
+      label: "Saved NGOs",
+      icon: Heart,
+      path: "/volunteer/saved-ngo",
+    },
+    {
+      label: "My Requests",
+      icon: FileText,
+      path: "/volunteer/requests",
+    },
+    {
+      label: "Notifications",
+      icon: Bell,
+      path: "/volunteer/notifications",
+    },
+  ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setShowLogoutDialog(false);
+    navigate("/", { replace: true });
+  };
 
   return (
-    <aside className="volunteer_sidebar">
-      <div className="sidebar_brand">
-        <div className="sidebar_brand_logo">
-          🌱
+    <>
+      <aside className="volunteer_sidebar">
+        <div className="sidebar_brand">
+          <img
+            src={logo}
+            alt="VolunteerConnect"
+            className="sidebar_brand_image"
+          />
         </div>
 
-        <div className="sidebar_brand_title">
-          <h2>VolunteerConnect</h2>
-          <p>Connect. Serve. Impact.</p>
-        </div>
-      </div>
+        <nav className="sidebar_navigation">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
 
-      <nav className="sidebar_navigation">
-        <button
-          type="button"
-          className="sidebar_link sidebar_active"
-          onClick={() => navigate("/")}
-        >
-          <LayoutDashboard size={19} />
-          <span>Dashboard</span>
-        </button>
+            const isActive =
+              location.pathname === item.path ||
+              (
+                item.path !== "/volunteer-dashboard" &&
+                location.pathname.startsWith(item.path + "/")
+              );
 
-        <button
-          type="button"
-          className="sidebar_link sidebar_discover"
-          onClick={() => setDiscoverOpen(!discoverOpen)}
-        >
-          <div className="sidebar_link_left">
-            <Search size={19} />
-            <span>Discover</span>
-          </div>
-
-          {discoverOpen ? (
-            <ChevronUp size={15} />
-          ) : (
-            <ChevronDown size={15} />
-          )}
-        </button>
-
-        {discoverOpen && (
-          <div className="sidebar_submenu">
-            <button
-              type="button"
-              className="sidebar_submenu_link"
-              onClick={() => navigate("/nearby-ngos")}
-            >
-              <MapPin size={15} />
-              <span>Find NGOs near me</span>
-            </button>
-
-            <button
-              type="button"
-              className="sidebar_submenu_link"
-              onClick={() => navigate("/browse-ngos")}
-            >
-              <Building2 size={15} />
-              <span>Browse all NGOs</span>
-            </button>
-          </div>
-        )}
-
-        <button
-          type="button"
-          className="sidebar_link"
-          onClick={() => navigate("/volunteer/experience")}
-        >
-          <Award size={19} />
-          <span>My Experience</span>
-        </button>
-
-        <button
-          type="button"
-          className="sidebar_link"
-          onClick={() => navigate("/volunteer/requests")}
-        >
-          <FileText size={19} />
-          <span>My Requests</span>
-        </button>
-
-        <button
-          type="button"
-          className="sidebar_link"
-          onClick={() => navigate("/volunteer/notifications")}
-        >
-          <Bell size={19} />
-          <span>Notifications</span>
-
-          <span className="notification_badge">
-            3
-          </span>
-        </button>
-
-        <button
-          type="button"
-          className="sidebar_link"
-          onClick={() => navigate("/volunteer/saved-ngo")}
-        >
-          <Heart size={19} />
-          <span>Saved</span>
-        </button>
+            return (
+              <button
+                key={item.path}
+                type="button"
+                className={`sidebar_link ${
+                  isActive ? "sidebar_active" : ""
+                }`}
+                onClick={() => navigate(item.path)}
+              >
+                <Icon size={20} />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
 
         <hr className="sidebar_divider" />
 
-        <button
-          type="button"
-          className="sidebar_link"
-          onClick={() => navigate("/volunteer-profile")}
-        >
-          <User size={19} />
-          <span>My Profile</span>
-        </button>
-      </nav>
+        <div className="sidebar_bottom">
+          <button
+            type="button"
+            className="sidebar_logout"
+            onClick={() => setShowLogoutDialog(true)}
+          >
+            <LogOut size={19} />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
 
-      <div className="sidebar_bottom">
-        <hr className="sidebar_divider" />
-
-        <button
-          type="button"
-          className="sidebar_logout"
+      {showLogoutDialog && (
+        <div
+          className="logout_overlay"
+          onClick={() => setShowLogoutDialog(false)}
         >
-          <LogOut size={19} />
-          <span>Logout</span>
-        </button>
-      </div>
-    </aside>
+          <div
+            className="logout_dialog"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="logout_close"
+              onClick={() => setShowLogoutDialog(false)}
+            >
+              <X size={21} />
+            </button>
+
+            <div className="logout_icon">
+              <LogOut size={36} />
+            </div>
+
+            <h2>Confirm Logout</h2>
+
+            <p>
+              Are you sure you want to log out of your volunteer account?
+            </p>
+
+            <div className="logout_actions">
+              <button
+                type="button"
+                className="logout_cancel"
+                onClick={() => setShowLogoutDialog(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="logout_confirm"
+                onClick={handleLogout}
+              >
+                Yes, Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

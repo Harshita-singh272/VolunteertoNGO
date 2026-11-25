@@ -1,9 +1,11 @@
+
 import React from "react";
 import {
   CalendarDays,
   ChevronRight,
   Clock,
   MapPin,
+  MessageSquare,
 } from "lucide-react";
 
 import "../styles/VolunteerRequestCard.css";
@@ -27,10 +29,8 @@ const VolunteerRequestCard = ({ request, onView }) => {
         return "Accepted";
 
       case "denied":
+      case "rejected":
         return "Denied";
-
-      case "message":
-        return "Message Received";
 
       case "pending":
       default:
@@ -44,14 +44,33 @@ const VolunteerRequestCard = ({ request, onView }) => {
         return "request_card_status_accepted";
 
       case "denied":
+      case "rejected":
         return "request_card_status_denied";
-
-      case "message":
-        return "request_card_status_message";
 
       case "pending":
       default:
         return "request_card_status_pending";
+    }
+  };
+
+  const ngoMessage = request.ngoResponse?.message?.trim() || "";
+  const messageSentAt = request.ngoResponse?.sentAt;
+
+  const getUpdateLabel = () => {
+    if (ngoMessage) {
+      return "Message sent";
+    }
+
+    switch (request.status) {
+      case "accepted":
+        return "Request accepted";
+
+      case "denied":
+      case "rejected":
+        return "Request denied";
+
+      default:
+        return "Waiting for NGO response";
     }
   };
 
@@ -74,8 +93,7 @@ const VolunteerRequestCard = ({ request, onView }) => {
               <MapPin size={15} />
 
               <span>
-                {request.location ||
-                  "Location not available"}
+                {request.location || "Location not available"}
               </span>
             </div>
           </div>
@@ -102,11 +120,7 @@ const VolunteerRequestCard = ({ request, onView }) => {
         <div className="volunteer_request_meta_item">
           <Clock size={16} />
 
-          <span>
-            {request.status === "pending"
-              ? "Waiting for NGO response"
-              : "Request updated"}
-          </span>
+          <span>{getUpdateLabel()}</span>
         </div>
       </div>
 
@@ -116,13 +130,28 @@ const VolunteerRequestCard = ({ request, onView }) => {
         </span>
 
         <p>
-          {request.reason ||
-            "No reason provided."}
+          {request.reason || "No reason provided."}
         </p>
       </div>
 
+      {ngoMessage && (
+        <div className="volunteer_request_reason">
+          <span className="volunteer_request_label">
+            <MessageSquare size={14} />
+            Message from NGO
+          </span>
+
+          <p>{ngoMessage}</p>
+
+          {messageSentAt && (
+            <small>
+              Sent {formatDate(messageSentAt)}
+            </small>
+          )}
+        </div>
+      )}
+
       <div className="volunteer_request_card_bottom">
-        
         <button
           type="button"
           className="volunteer_request_view_button"

@@ -1,28 +1,90 @@
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { Search, CalendarDays, X } from "lucide-react";
 
 import VolunteerSidebar from "../../scr1/components/VolunteerSidebar.jsx";
 import Profilebar from "../../scr1/components/Profilebar.jsx";
 import NotificationCard from "../components/NotificationCard.jsx";
 
-import { mockNotifications } from "../constants/mockNotifications.js";
-
 import "../styles/Notifications.css";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const Notifications = () => {
+  const [notifications, setNotifications] = useState([]);
   const [ngoSearch, setNgoSearch] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredNotifications = mockNotifications.filter(
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchNotifications = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        if (isMounted) {
+          setError("Please log in to view your notifications.");
+          setLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${API_URL}/api/requests/notifications`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || "Unable to load notifications."
+          );
+        }
+
+        if (isMounted) {
+          setNotifications(data.notifications || []);
+          setError("");
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err.message || "Unable to load notifications.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchNotifications();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const filteredNotifications = notifications.filter(
     (notification) => {
-      const matchesNgo = notification.ngoName
-        ?.toLowerCase()
+      const matchesNgo = (notification.ngoName || "")
+        .toLowerCase()
         .includes(ngoSearch.toLowerCase());
 
-      const matchesDate = selectedDate
+      const notificationDate = notification.notificationDate
         ? new Date(notification.notificationDate)
-            .toISOString()
-            .split("T")[0] === selectedDate
+        : null;
+
+      const matchesDate = selectedDate
+        ? notificationDate &&
+          !Number.isNaN(notificationDate.getTime()) &&
+          notificationDate.toISOString().split("T")[0] === selectedDate
         : true;
 
       return matchesNgo && matchesDate;
@@ -45,7 +107,6 @@ const Notifications = () => {
         <Profilebar />
 
         <div className="notifications_page">
-
           <div className="notifications_heading">
             <h1>Notifications</h1>
 
@@ -56,7 +117,6 @@ const Notifications = () => {
           </div>
 
           <div className="notifications_filters">
-
             <div className="notification_filter_group">
               <label htmlFor="notificationNgoSearch">
                 Search NGO
@@ -106,23 +166,41 @@ const Notifications = () => {
                 Clear Filters
               </button>
             )}
-
           </div>
 
-          {filteredNotifications.length === 0 ? (
+          {loading ? (
             <div className="notifications_empty">
-
+              <p>Loading notifications...</p>
+            </div>
+          ) : error ? (
+            <div className="notifications_empty" role="alert">
+              <h2>Unable to load notifications</h2>
+              <p>{error}</p>
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="notifications_empty">
               <div className="notifications_empty_icon">
                 <Search size={25} />
               </div>
 
-              <h2>
-                No notifications found
-              </h2>
+              <h2>No notifications yet</h2>
 
               <p>
-                No notifications match your current
-                search or date filter.
+                When an NGO accepts, denies, or sends a message
+                about your request, it will appear here.
+              </p>
+            </div>
+          ) : filteredNotifications.length === 0 ? (
+            <div className="notifications_empty">
+              <div className="notifications_empty_icon">
+                <Search size={25} />
+              </div>
+
+              <h2>No notifications found</h2>
+
+              <p>
+                No notifications match your current search
+                or date filter.
               </p>
 
               {hasFilters && (
@@ -134,31 +212,26 @@ const Notifications = () => {
                   Clear Filters
                 </button>
               )}
-
             </div>
           ) : (
             <>
               <div className="notifications_result_info">
-                Showing{" "}
-                {filteredNotifications.length}{" "}
+                Showing {filteredNotifications.length}{" "}
                 {filteredNotifications.length === 1
                   ? "notification"
                   : "notifications"}
               </div>
 
               <div className="notifications_list">
-                {filteredNotifications.map(
-                  (notification) => (
-                    <NotificationCard
-                      key={notification.id}
-                      notification={notification}
-                    />
-                  )
-                )}
+                {filteredNotifications.map((notification) => (
+                  <NotificationCard
+                    key={notification.id}
+                    notification={notification}
+                  />
+                ))}
               </div>
             </>
           )}
-
         </div>
       </main>
     </div>

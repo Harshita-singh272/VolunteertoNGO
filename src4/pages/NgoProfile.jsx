@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -17,80 +18,106 @@ import NgoSidebar from "../components/NgoSidebar.jsx";
 
 import "../styles/NgoProfile.css";
 
-const NgoProfile = ({ ngoData }) => {
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+const NgoProfile = () => {
   const navigate = useNavigate();
 
-  const ngo = ngoData || {
-    id: 1,
+  const [ngo, setNgo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    organizationName: "Helping Hands Foundation",
+  useEffect(() => {
+    const fetchNgoProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-    logo: null,
+        if (!token) {
+          throw new Error("Please log in again.");
+        }
 
-    location: "Delhi",
+        const response = await fetch(
+          `${API_URL}/api/ngos/profile`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    causes: [
-      "Education",
-      "Child Welfare",
-      "Animal Welfare",
-      "Community Service",
-    ],
+        const data = await response.json();
 
-    description:
-      "Supporting children's education and providing learning resources to underserved communities.",
+        if (!response.ok) {
+          throw new Error(
+            data.message || "Unable to load NGO profile."
+          );
+        }
 
-    mission:
-      "To create equal opportunities for children and communities through education, support, and meaningful community programs.",
+        setNgo({
+          ...data.profile,
+          id: data.profile._id,
+          logo: data.profile.logoUrl || data.profile.logo || "",
+        });
+      } catch (err) {
+        setError(
+          err.message || "Unable to load your organization profile."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    foundedYear: "2015",
-
-    organizationSize: "11-50",
-
-    contactPersonName: "Priya Sharma",
-
-    contactPersonRole: "Founder & Director",
-
-    contactEmail: "helpinghands@example.com",
-
-    contactPhone: "+91 98765 43210",
-
-    website: "www.helpinghands.org",
-
-    socialLink: "@helpinghands",
-
-    programs:
-      "Educational workshops, learning resource distribution, community development programs, and mentorship.",
-
-    volunteerHelp:
-      "Volunteers can help with teaching, mentoring, event organization, communication, and community activities.",
-
-    currentNeeds:
-      "Teaching volunteers, educational materials, community outreach support, and event volunteers.",
-  };
+    fetchNgoProfile();
+  }, []);
 
   const handleEditProfile = () => {
     navigate("/ngo/profile/edit");
   };
 
+  if (loading) {
+    return (
+      <div className="ngo_profile_layout">
+        <NgoSidebar />
+        <main className="ngo_profile_main">
+          <div className="owner_ngo_page">
+            <p>Loading your organization profile...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error || !ngo) {
+    return (
+      <div className="ngo_profile_layout">
+        <NgoSidebar />
+        <main className="ngo_profile_main">
+          <div className="owner_ngo_page">
+            <h2>Unable to load NGO profile</h2>
+            <p>{error || "No organization profile was found."}</p>
+            <button
+              type="button"
+              className="owner_ngo_edit_button"
+              onClick={handleEditProfile}
+            >
+              Complete Profile
+            </button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="ngo_profile_layout">
-
       <NgoSidebar />
 
       <main className="ngo_profile_main">
-
-        {/* =====================================================
-            COMPLETELY UNIQUE NGO OWNER PROFILE ROOT
-        ===================================================== */}
-
         <div className="owner_ngo_page">
 
-          {/* =====================================================
-              EDIT BUTTON
-          ===================================================== */}
-
           <div className="owner_ngo_actions">
-
             <button
               type="button"
               className="owner_ngo_edit_button"
@@ -99,18 +126,10 @@ const NgoProfile = ({ ngoData }) => {
               <Pencil size={17} />
               Edit Profile
             </button>
-
           </div>
 
-
-          {/* =====================================================
-              HEADER
-          ===================================================== */}
-
           <section className="owner_ngo_header">
-
             <div className="owner_ngo_logo">
-
               {ngo.logo ? (
                 <img
                   src={ngo.logo}
@@ -123,195 +142,99 @@ const NgoProfile = ({ ngoData }) => {
                     .toUpperCase() || "N"}
                 </div>
               )}
-
             </div>
-
 
             <div className="owner_ngo_identity">
-
               <h1>
-                {ngo.organizationName ||
-                  "Organization Name"}
+                {ngo.organizationName || "Organization Name"}
               </h1>
 
-
               <div className="owner_ngo_location">
-
                 <MapPin size={18} />
-
                 <span>
-                  {ngo.location ||
-                    "Location not provided"}
+                  {ngo.location || "Location not provided"}
                 </span>
-
               </div>
 
-
-              {ngo.causes &&
-                ngo.causes.length > 0 && (
-
-                  <div className="owner_ngo_causes">
-
-                    {ngo.causes.map((cause) => (
-                      <span
-                        key={cause}
-                        className="owner_ngo_cause"
-                      >
-                        {cause}
-                      </span>
-                    ))}
-
-                  </div>
-
-                )}
-
+              {ngo.causes?.length > 0 && (
+                <div className="owner_ngo_causes">
+                  {ngo.causes.map((cause) => (
+                    <span
+                      key={cause}
+                      className="owner_ngo_cause"
+                    >
+                      {cause}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
-
           </section>
 
-
-          {/* =====================================================
-              MAIN CONTENT
-          ===================================================== */}
-
           <div className="owner_ngo_content">
-
-
-            {/* =================================================
-                LEFT COLUMN
-            ================================================= */}
-
             <div className="owner_ngo_left">
 
-
-              {/* ABOUT */}
-
               <section className="owner_ngo_card">
-
                 <div className="owner_ngo_card_title">
-
                   <Target size={21} />
-
-                  <h2>
-                    About Your Organization
-                  </h2>
-
+                  <h2>About Your Organization</h2>
                 </div>
-
                 <p>
                   {ngo.description ||
                     "No organization description has been added yet."}
                 </p>
-
               </section>
 
-
-              {/* MISSION */}
-
               <section className="owner_ngo_card">
-
                 <div className="owner_ngo_card_title">
-
                   <Heart size={21} />
-
-                  <h2>
-                    Our Mission
-                  </h2>
-
+                  <h2>Our Mission</h2>
                 </div>
-
                 <p>
-                  {ngo.mission ||
-                    "No mission has been added yet."}
+                  {ngo.mission || "No mission has been added yet."}
                 </p>
-
               </section>
 
-
-              {/* PROGRAMS */}
-
               <section className="owner_ngo_card">
-
                 <div className="owner_ngo_card_title">
-
                   <Target size={21} />
-
-                  <h2>
-                    Our Programs
-                  </h2>
-
+                  <h2>Our Programs</h2>
                 </div>
-
                 <p>
-                  {ngo.programs ||
-                    "No programs have been added yet."}
+                  {ngo.programs || "No programs have been added yet."}
                 </p>
-
               </section>
 
-
-              {/* VOLUNTEER HELP */}
-
               <section className="owner_ngo_card">
-
                 <div className="owner_ngo_card_title">
-
                   <Users size={21} />
-
-                  <h2>
-                    How Volunteers Can Help
-                  </h2>
-
+                  <h2>How Volunteers Can Help</h2>
                 </div>
-
                 <p>
                   {ngo.volunteerHelp ||
                     "No volunteer information has been added yet."}
                 </p>
-
               </section>
 
-
-              {/* CURRENT NEEDS */}
-
               <section className="owner_ngo_card">
-
                 <div className="owner_ngo_card_title">
-
                   <Heart size={21} />
-
-                  <h2>
-                    Current Volunteer Needs
-                  </h2>
-
+                  <h2>Current Volunteer Needs</h2>
                 </div>
-
                 <p>
                   {ngo.currentNeeds ||
                     "No current volunteer needs have been added yet."}
                 </p>
-
               </section>
 
-
-              {/* AREAS OF WORK */}
-
               <section className="owner_ngo_card">
-
                 <div className="owner_ngo_card_title">
-
                   <Target size={21} />
-
-                  <h2>
-                    Areas of Work
-                  </h2>
-
+                  <h2>Areas of Work</h2>
                 </div>
 
-
                 <div className="owner_ngo_causes">
-
-                  {ngo.causes &&
+                  {ngo.causes?.length > 0 ? (
                     ngo.causes.map((cause) => (
                       <span
                         key={cause}
@@ -319,227 +242,118 @@ const NgoProfile = ({ ngoData }) => {
                       >
                         {cause}
                       </span>
-                    ))}
-
+                    ))
+                  ) : (
+                    <p>No causes have been added yet.</p>
+                  )}
                 </div>
-
               </section>
-
             </div>
-
-
-            {/* =================================================
-                RIGHT COLUMN
-            ================================================= */}
 
             <aside className="owner_ngo_right">
 
-
-              {/* ORGANIZATION DETAILS */}
-
               <section className="owner_ngo_card">
-
                 <h2 className="owner_ngo_side_title">
                   Organization Details
                 </h2>
 
-
                 <div className="owner_ngo_detail_list">
-
-
                   <div className="owner_ngo_detail_item">
-
                     <CalendarDays size={18} />
-
                     <div>
-
-                      <span>
-                        Founded Year
-                      </span>
-
+                      <span>Founded Year</span>
                       <strong>
-                        {ngo.foundedYear ||
-                          "Not provided"}
+                        {ngo.foundedYear || "Not provided"}
                       </strong>
-
                     </div>
-
                   </div>
 
-
                   <div className="owner_ngo_detail_item">
-
                     <Users size={18} />
-
                     <div>
-
-                      <span>
-                        Organization Size
-                      </span>
-
+                      <span>Organization Size</span>
                       <strong>
-                        {ngo.organizationSize ||
-                          "Not provided"}
+                        {ngo.organizationSize || "Not provided"}
                       </strong>
-
                     </div>
-
                   </div>
-
 
                   <div className="owner_ngo_detail_item">
-
                     <MapPin size={18} />
-
                     <div>
-
-                      <span>
-                        Location
-                      </span>
-
+                      <span>Location</span>
                       <strong>
-                        {ngo.location ||
-                          "Not provided"}
+                        {ngo.location || "Not provided"}
                       </strong>
-
                     </div>
-
                   </div>
-
                 </div>
-
               </section>
 
-
-              {/* CONTACT INFORMATION */}
-
               <section className="owner_ngo_card">
-
                 <h2 className="owner_ngo_side_title">
                   Contact Information
                 </h2>
 
-
                 <div className="owner_ngo_detail_list">
-
-
                   <div className="owner_ngo_detail_item">
-
                     <Users size={18} />
-
                     <div>
-
-                      <span>
-                        Contact Person
-                      </span>
-
+                      <span>Contact Person</span>
                       <strong>
-                        {ngo.contactPersonName ||
-                          "Not provided"}
+                        {ngo.contactPersonName || "Not provided"}
                       </strong>
-
                       {ngo.contactPersonRole && (
-                        <small>
-                          {ngo.contactPersonRole}
-                        </small>
+                        <small>{ngo.contactPersonRole}</small>
                       )}
-
                     </div>
-
                   </div>
 
-
                   <div className="owner_ngo_detail_item">
-
                     <Mail size={18} />
-
                     <div>
-
-                      <span>
-                        Email
-                      </span>
-
+                      <span>Email</span>
                       <strong>
-                        {ngo.contactEmail ||
-                          "Not provided"}
+                        {ngo.contactEmail || "Not provided"}
                       </strong>
-
                     </div>
-
                   </div>
 
-
                   <div className="owner_ngo_detail_item">
-
                     <Phone size={18} />
-
                     <div>
-
-                      <span>
-                        Phone
-                      </span>
-
+                      <span>Phone</span>
                       <strong>
-                        {ngo.contactPhone ||
-                          "Not provided"}
+                        {ngo.contactPhone || "Not provided"}
                       </strong>
-
                     </div>
-
                   </div>
-
 
                   <div className="owner_ngo_detail_item">
-
                     <Globe size={18} />
-
                     <div>
-
-                      <span>
-                        Website
-                      </span>
-
+                      <span>Website</span>
                       <strong>
-                        {ngo.website ||
-                          "Not provided"}
+                        {ngo.website || "Not provided"}
                       </strong>
-
                     </div>
-
                   </div>
-
 
                   <div className="owner_ngo_detail_item">
-
                     <Globe size={18} />
-
                     <div>
-
-                      <span>
-                        Social Media
-                      </span>
-
+                      <span>Social Media</span>
                       <strong>
-                        {ngo.socialLink ||
-                          "Not provided"}
+                        {ngo.socialLink || "Not provided"}
                       </strong>
-
                     </div>
-
                   </div>
-
                 </div>
-
               </section>
-
             </aside>
-
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 };

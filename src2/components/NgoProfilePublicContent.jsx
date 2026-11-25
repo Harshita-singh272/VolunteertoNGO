@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 
 import {
@@ -28,10 +29,19 @@ const NgoProfilePublicContent = ({ ngo }) => {
     }
 
     try {
-      const savedIds =
-        JSON.parse(localStorage.getItem("savedNgos")) || [];
+      const savedIds = JSON.parse(
+        localStorage.getItem("savedNgos") || "[]"
+      );
 
-      setIsSaved(savedIds.includes(ngo.id));
+      const normalizedIds = savedIds.map((item) =>
+        String(
+          typeof item === "object" && item !== null
+            ? item.id
+            : item
+        )
+      );
+
+      setIsSaved(normalizedIds.includes(String(ngo.id)));
     } catch (error) {
       console.error("Unable to read saved NGOs:", error);
       setIsSaved(false);
@@ -44,32 +54,38 @@ const NgoProfilePublicContent = ({ ngo }) => {
     }
 
     try {
-      const savedIds =
-        JSON.parse(localStorage.getItem("savedNgos")) || [];
+      const savedIds = JSON.parse(
+        localStorage.getItem("savedNgos") || "[]"
+      );
 
-      if (isSaved) {
-        const updatedIds = savedIds.filter(
-          (id) => id !== ngo.id
-        );
+      const normalizedIds = savedIds.map((item) =>
+        String(
+          typeof item === "object" && item !== null
+            ? item.id
+            : item
+        )
+      );
 
-        localStorage.setItem(
-          "savedNgos",
-          JSON.stringify(updatedIds)
+      const currentId = String(ngo.id);
+
+      let updatedIds;
+
+      if (normalizedIds.includes(currentId)) {
+        updatedIds = normalizedIds.filter(
+          (id) => id !== currentId
         );
 
         setIsSaved(false);
       } else {
-        if (!savedIds.includes(ngo.id)) {
-          const updatedIds = [...savedIds, ngo.id];
-
-          localStorage.setItem(
-            "savedNgos",
-            JSON.stringify(updatedIds)
-          );
-        }
+        updatedIds = [...normalizedIds, currentId];
 
         setIsSaved(true);
       }
+
+      localStorage.setItem(
+        "savedNgos",
+        JSON.stringify(updatedIds)
+      );
     } catch (error) {
       console.error("Unable to save NGO:", error);
     }
@@ -114,7 +130,6 @@ const NgoProfilePublicContent = ({ ngo }) => {
 
   return (
     <div className="vol_ngo_profile_page">
-      {/* Back button */}
       <button
         type="button"
         className="vol_ngo_back_button"
@@ -124,7 +139,6 @@ const NgoProfilePublicContent = ({ ngo }) => {
         Back
       </button>
 
-      {/* NGO Header */}
       <section className="vol_ngo_profile_header">
         <div className="vol_ngo_profile_logo">
           {ngo.logo ? (
@@ -178,12 +192,8 @@ const NgoProfilePublicContent = ({ ngo }) => {
         </div>
       </section>
 
-      {/* Main Content */}
       <div className="vol_ngo_profile_content">
-        {/* LEFT COLUMN */}
         <div className="vol_ngo_profile_left">
-
-          {/* About */}
           <section className="vol_ngo_info_card">
             <h2>About the Organization</h2>
 
@@ -192,7 +202,6 @@ const NgoProfilePublicContent = ({ ngo }) => {
             </p>
           </section>
 
-          {/* Mission */}
           <section className="vol_ngo_info_card">
             <h2>Our Mission</h2>
 
@@ -201,7 +210,6 @@ const NgoProfilePublicContent = ({ ngo }) => {
             </p>
           </section>
 
-          {/* Programs */}
           <section className="vol_ngo_info_card">
             <h2>Programs & Work</h2>
 
@@ -210,7 +218,6 @@ const NgoProfilePublicContent = ({ ngo }) => {
             </p>
           </section>
 
-          {/* Volunteer Help */}
           <section className="vol_ngo_info_card">
             <div className="vol_ngo_card_heading">
               <Heart size={21} />
@@ -225,7 +232,6 @@ const NgoProfilePublicContent = ({ ngo }) => {
             </p>
           </section>
 
-          {/* Current Needs */}
           <section className="vol_ngo_info_card">
             <h2>Current Needs</h2>
 
@@ -234,7 +240,6 @@ const NgoProfilePublicContent = ({ ngo }) => {
             </p>
           </section>
 
-          {/* Areas of Work */}
           <section className="vol_ngo_info_card">
             <h2>Areas of Work</h2>
 
@@ -254,7 +259,6 @@ const NgoProfilePublicContent = ({ ngo }) => {
             )}
           </section>
 
-          {/* Request */}
           <section className="vol_ngo_info_card">
             <div className="vol_ngo_card_heading">
               <Heart size={21} />
@@ -281,15 +285,11 @@ const NgoProfilePublicContent = ({ ngo }) => {
           </section>
         </div>
 
-        {/* RIGHT COLUMN */}
         <aside className="vol_ngo_profile_right">
-
-          {/* Organization Details */}
           <section className="vol_ngo_info_card">
             <h2>Organization Details</h2>
 
             <div className="vol_ngo_detail_list">
-
               <div className="vol_ngo_detail_item">
                 <MapPin size={19} />
 
@@ -324,9 +324,7 @@ const NgoProfilePublicContent = ({ ngo }) => {
                   <span>Founded</span>
 
                   <strong>
-                    {displayValue(
-                      ngo.foundedYear
-                    )}
+                    {displayValue(ngo.foundedYear)}
                   </strong>
                 </div>
               </div>
@@ -335,27 +333,20 @@ const NgoProfilePublicContent = ({ ngo }) => {
                 <Users size={19} />
 
                 <div>
-                  <span>
-                    Organization Size
-                  </span>
+                  <span>Organization Size</span>
 
                   <strong>
-                    {displayValue(
-                      ngo.organizationSize
-                    )}
+                    {displayValue(ngo.organizationSize)}
                   </strong>
                 </div>
               </div>
-
             </div>
           </section>
 
-          {/* Contact Information */}
           <section className="vol_ngo_info_card">
             <h2>Contact Information</h2>
 
             <div className="vol_ngo_detail_list">
-
               <div className="vol_ngo_detail_item">
                 <Building2 size={19} />
 
@@ -363,9 +354,7 @@ const NgoProfilePublicContent = ({ ngo }) => {
                   <span>Contact Person</span>
 
                   <strong>
-                    {displayValue(
-                      ngo.contactPersonName
-                    )}
+                    {displayValue(ngo.contactPersonName)}
                   </strong>
 
                   {ngo.contactPersonRole && (
@@ -383,9 +372,7 @@ const NgoProfilePublicContent = ({ ngo }) => {
                   <span>Phone</span>
 
                   <strong>
-                    {displayValue(
-                      ngo.contactPhone
-                    )}
+                    {displayValue(ngo.contactPhone)}
                   </strong>
                 </div>
               </div>
@@ -397,9 +384,7 @@ const NgoProfilePublicContent = ({ ngo }) => {
                   <span>Email</span>
 
                   <strong>
-                    {displayValue(
-                      ngo.contactEmail
-                    )}
+                    {displayValue(ngo.contactEmail)}
                   </strong>
                 </div>
               </div>
@@ -411,9 +396,7 @@ const NgoProfilePublicContent = ({ ngo }) => {
                   <span>Website</span>
 
                   <strong>
-                    {displayValue(
-                      ngo.website
-                    )}
+                    {displayValue(ngo.website)}
                   </strong>
                 </div>
               </div>
@@ -425,17 +408,13 @@ const NgoProfilePublicContent = ({ ngo }) => {
                   <span>Social Media</span>
 
                   <strong>
-                    {displayValue(
-                      ngo.socialLink
-                    )}
+                    {displayValue(ngo.socialLink)}
                   </strong>
                 </div>
               </div>
-
             </div>
           </section>
 
-          {/* Save NGO */}
           <section
             className={`vol_ngo_save_card ${
               isSaved ? "vol_ngo_saved" : ""
@@ -444,11 +423,7 @@ const NgoProfilePublicContent = ({ ngo }) => {
             <Heart
               size={23}
               fill={isSaved ? "red" : "none"}
-              color={
-                isSaved
-                  ? "red"
-                  : "currentColor"
-              }
+              color={isSaved ? "red" : "currentColor"}
             />
 
             <div>
@@ -468,16 +443,13 @@ const NgoProfilePublicContent = ({ ngo }) => {
             <button
               type="button"
               className={`vol_ngo_save_button ${
-                isSaved
-                  ? "saved"
-                  : ""
+                isSaved ? "saved" : ""
               }`}
               onClick={handleSaveNgo}
             >
               {isSaved ? "Saved" : "Save NGO"}
             </button>
           </section>
-
         </aside>
       </div>
     </div>

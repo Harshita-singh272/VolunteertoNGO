@@ -1,12 +1,12 @@
 import React from "react";
 import "../styles/Navbar.css";
-
+import logo from "../assets/logo_image.png";
 const Navbar = ({ onAuthClick }) => {
   return (
     <nav className="navbar">
 
       <div className="nav_logo">
-        VolunteerConnect
+        <img src={logo} alt="logo" />
       </div>
 
       <div className="nav_links">

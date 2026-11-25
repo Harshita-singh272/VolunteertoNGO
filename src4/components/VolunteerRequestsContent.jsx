@@ -1,91 +1,119 @@
 
-import React, { useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import {
   Search,
-  Mail,
   Phone,
   MapPin,
   Clock3,
   Check,
   X,
-  Send,
   UserRound,
+  MessageSquare,
 } from "lucide-react";
 
 import "../styles/VolunteerRequests.css";
 
-const initialRequests = [
-  {
-    id: 1,
-    name: "Ananya Sharma",
-    email: "ananya.sharma@example.com",
-    phone: "+91 98765 43210",
-    location: "Delhi, India",
-    message:
-      "I am interested in volunteering for your educational programs. I would love to help children with their studies.",
-    skills: ["Teaching", "Communication", "Event Management"],
-    date: "Oct 28, 2024",
-    status: "pending",
-    image: "https://i.pravatar.cc/150?img=47",
-  },
-  {
-    id: 2,
-    name: "Rohit Mehta",
-    email: "rohit.mehta@example.com",
-    phone: "+91 87654 32109",
-    location: "Gurgaon, India",
-    message:
-      "I have experience organizing events and would like to contribute to your community initiatives.",
-    skills: ["Event Management", "Team Work"],
-    date: "Oct 26, 2024",
-    status: "pending",
-    image: "https://i.pravatar.cc/150?img=12",
-  },
-  {
-    id: 3,
-    name: "Priya Verma",
-    email: "priya.verma@example.com",
-    phone: "+91 76543 21098",
-    location: "Noida, India",
-    message:
-      "I am passionate about child welfare and would love to support your education programs.",
-    skills: ["Child Education", "Mentoring"],
-    date: "Oct 24, 2024",
-    status: "accepted",
-    image: "https://i.pravatar.cc/150?img=32",
-  },
-  {
-    id: 4,
-    name: "Karan Gupta",
-    email: "karan.gupta@example.com",
-    phone: "+91 65432 10987",
-    location: "Faridabad, India",
-    message:
-      "I can help with digital content, social media and awareness campaigns.",
-    skills: ["Social Media", "Graphic Design"],
-    date: "Oct 22, 2024",
-    status: "rejected",
-    image: "https://i.pravatar.cc/150?img=11",
-  },
-];
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const VolunteerRequestsContent = () => {
-  const [requests, setRequests] = useState(initialRequests);
+  const [requests, setRequests] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [search, setSearch] = useState("");
-
-  // Each request has its own unsent reply text.
   const [replies, setReplies] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [updatingId, setUpdatingId] = useState(null);
 
-  // Local demo record of messages sent.
-  const [sentMessages, setSentMessages] = useState([]);
+  const fetchRequests = useCallback(async (showLoading = false) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setError("Please log in to view volunteer requests.");
+      setLoading(false);
+      return;
+    }
+
+    if (showLoading) {
+      setLoading(true);
+    }
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/requests/ngo`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Could not load volunteer requests."
+        );
+      }
+
+      setRequests(data.requests || []);
+      setError("");
+    } catch (err) {
+      setError(
+        err.message || "Unable to load volunteer requests."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRequests(true);
+
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        fetchRequests();
+      }
+    }, 10000);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchRequests();
+      }
+    };
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
+    };
+  }, [fetchRequests]);
 
   const counts = useMemo(
     () => ({
       all: requests.length,
-      pending: requests.filter((r) => r.status === "pending").length,
-      accepted: requests.filter((r) => r.status === "accepted").length,
-      rejected: requests.filter((r) => r.status === "rejected").length,
+      pending: requests.filter(
+        (request) => request.status === "pending"
+      ).length,
+      accepted: requests.filter(
+        (request) => request.status === "accepted"
+      ).length,
+      rejected: requests.filter(
+        (request) => request.status === "rejected"
+      ).length,
     }),
     [requests]
   );
@@ -94,20 +122,25 @@ const VolunteerRequestsContent = () => {
     const term = search.trim().toLowerCase();
 
     return requests.filter((request) => {
-      const matchesFilter =
-        activeFilter === "all" || request.status === activeFilter;
+      const volunteer = request.volunteerProfile || {};
 
       const searchable = [
-        request.name,
-        request.email,
-        request.location,
-        request.message,
-        ...request.skills,
+        volunteer.fullName,
+        volunteer.phone,
+        volunteer.location,
+        request.reason,
+        request.additionalMessage,
+        volunteer.skills,
       ]
         .join(" ")
         .toLowerCase();
 
-      return matchesFilter && (!term || searchable.includes(term));
+      const matchesFilter =
+        activeFilter === "all" ||
+        request.status === activeFilter;
+
+      return matchesFilter &&
+        (!term || searchable.includes(term));
     });
   }, [requests, activeFilter, search]);
 
@@ -118,62 +151,85 @@ const VolunteerRequestsContent = () => {
     }));
   };
 
-  // Save a message in local demo state.
-  const saveMessage = (request, message, action) => {
-    if (!message.trim()) return;
+  const handleDecision = async (requestId, status) => {
+    const token = localStorage.getItem("token");
+    const message = (replies[requestId] || "").trim();
 
-    setSentMessages((previous) => [
-      ...previous,
-      {
-        id: Date.now(),
-        requestId: request.id,
-        volunteerName: request.name,
-        message: message.trim(),
-        action,
-        date: new Date().toLocaleString(),
-      },
-    ]);
-  };
-
-  // Send a message only. The request status does not change.
-  const handleSendMessage = (request) => {
-    const message = replies[request.id] || "";
-
-    if (!message.trim()) {
-      alert("Please write a message first.");
+    if (!token) {
+      setError("Please log in again.");
       return;
     }
 
-    saveMessage(request, message, "message");
+    setUpdatingId(requestId);
+    setError("");
 
-    setReplies((previous) => ({
-      ...previous,
-      [request.id]: "",
-    }));
+    try {
+      const response = await fetch(
+        `${API_URL}/api/requests/${requestId}/status`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            status,
+            message,
+          }),
+        }
+      );
 
-    alert("Message saved in this demo.");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Unable to update the request."
+        );
+      }
+
+      setRequests((previous) =>
+        previous.map((request) =>
+          request._id === requestId
+            ? data.request
+            : request
+        )
+      );
+
+      setReplies((previous) => ({
+        ...previous,
+        [requestId]: "",
+      }));
+
+      await fetchRequests();
+    } catch (err) {
+      setError(
+        err.message || "Unable to update the request."
+      );
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
-  // Accept or reject, optionally with a message.
-  const handleDecision = (request, status) => {
-    const message = replies[request.id] || "";
+  const formatDate = (date) => {
+    if (!date) return "Date unavailable";
 
-    if (message.trim()) {
-      saveMessage(request, message, status);
-    }
+    return new Date(date).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
-    setRequests((previous) =>
-      previous.map((item) =>
-        item.id === request.id
-          ? { ...item, status }
-          : item
-      )
-    );
+  const formatDateTime = (date) => {
+    if (!date) return "";
 
-    setReplies((previous) => ({
-      ...previous,
-      [request.id]: "",
-    }));
+    return new Date(date).toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const StatusBadge = ({ status }) => {
@@ -192,23 +248,23 @@ const VolunteerRequestsContent = () => {
       },
     };
 
+    const current = config[status] || config.pending;
+
     return (
       <span className={`vr_status ${status}`}>
-        {config[status].icon}
-        {config[status].label}
+        {current.icon}
+        {current.label}
       </span>
     );
   };
 
   return (
     <div className="vr_page">
-      {/* PAGE HEADER */}
       <header className="vr_header">
         <div>
           <h1>Volunteer Requests</h1>
           <p>
-            Review volunteer applications and communicate
-            with volunteers.
+            Review volunteer applications and respond to volunteers.
           </p>
         </div>
 
@@ -223,7 +279,6 @@ const VolunteerRequestsContent = () => {
         </div>
       </header>
 
-      {/* FILTERS */}
       <div className="vr_filters">
         {[
           ["all", "All Requests"],
@@ -242,130 +297,196 @@ const VolunteerRequestsContent = () => {
         ))}
       </div>
 
-      {/* REQUEST CARDS */}
+      {error && (
+        <div className="vr_error" role="alert">
+          {error}
+        </div>
+      )}
+
       <section className="vr_list">
-        {filteredRequests.length === 0 ? (
+        {loading ? (
+          <div className="vr_empty">
+            <p>Loading volunteer requests...</p>
+          </div>
+        ) : filteredRequests.length === 0 ? (
           <div className="vr_empty">
             <UserRound size={34} />
             <h2>No requests found</h2>
-            <p>Try another search or filter.</p>
+            <p>
+              {requests.length === 0
+                ? "You haven't received any volunteer requests yet."
+                : "Try another search or filter."}
+            </p>
           </div>
         ) : (
-          filteredRequests.map((request) => (
-            <article className="vr_card" key={request.id}>
-              {/* VOLUNTEER DETAILS */}
-              <div className="vr_volunteer">
-                <img
-                  src={request.image}
-                  alt={request.name}
-                  className="vr_avatar"
-                />
+          filteredRequests.map((request) => {
+            const volunteer = request.volunteerProfile || {};
+            const isPending = request.status === "pending";
+            const isUpdating = updatingId === request._id;
+            const responseMessage =
+              request.ngoResponse?.message || "";
 
-                <div className="vr_person">
-                  <h3>{request.name}</h3>
+            const skills = volunteer.skills
+              ? volunteer.skills
+                  .split(",")
+                  .map((skill) => skill.trim())
+                  .filter(Boolean)
+              : [];
 
-                  <div className="vr_contact">
-                    <div>
-                      <Mail size={15} />
-                      <span>{request.email}</span>
-                    </div>
+            return (
+              <article className="vr_card" key={request._id}>
+                <div className="vr_volunteer">
+                  <div className="vr_avatar">
+                    {(volunteer.fullName || "V")
+                      .charAt(0)
+                      .toUpperCase()}
+                  </div>
 
-                    <div>
-                      <Phone size={15} />
-                      <span>{request.phone}</span>
-                    </div>
+                  <div className="vr_person">
+                    <h3>
+                      {volunteer.fullName || "Volunteer"}
+                    </h3>
 
-                    <div>
-                      <MapPin size={15} />
-                      <span>{request.location}</span>
+                    <div className="vr_contact">
+                      <div>
+                        <Phone size={15} />
+                        <span>
+                          {volunteer.phone || "Phone not provided"}
+                        </span>
+                      </div>
+
+                      <div>
+                        <MapPin size={15} />
+                        <span>
+                          {volunteer.location || "Location not provided"}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* APPLICATION DETAILS */}
-              <div className="vr_middle">
-                <div className="vr_message">
-                  <h4>Volunteer Message</h4>
-                  <p>{request.message}</p>
-                </div>
+                <div className="vr_middle">
+                  <div className="vr_message">
+                    <h4>Reason for Volunteering</h4>
+                    <p>
+                      {request.reason || "No reason provided."}
+                    </p>
 
-                <div className="vr_skills">
-                  <h4>Skills</h4>
-                  <div className="vr_skill_list">
-                    {request.skills.map((skill) => (
-                      <span key={skill}>{skill}</span>
-                    ))}
+                    {request.additionalMessage && (
+                      <>
+                        <h4>Volunteer Message</h4>
+                        <p>{request.additionalMessage}</p>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="vr_skills">
+                    <h4>Skills</h4>
+
+                    <div className="vr_skill_list">
+                      {skills.length > 0 ? (
+                        skills.map((skill) => (
+                          <span key={skill}>{skill}</span>
+                        ))
+                      ) : (
+                        <span>No skills provided</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="vr_skills">
+                    <h4>Availability</h4>
+                    <p>
+                      {volunteer.availability || "Not provided"}
+                    </p>
                   </div>
                 </div>
-              </div>
 
-              {/* RESPONSE AREA */}
-              <div className="vr_response">
-                <div className="vr_response_top">
-                  <StatusBadge status={request.status} />
+                <div className="vr_response">
+                  <div className="vr_response_top">
+                    <StatusBadge status={request.status} />
 
-                  <span className="vr_date">
-                    <Clock3 size={13} />
-                    {request.date}
-                  </span>
+                    <span className="vr_date">
+                      <Clock3 size={13} />
+                      {formatDate(request.createdAt)}
+                    </span>
+                  </div>
+
+                  {isPending ? (
+                    <>
+                      <label htmlFor={`reply-${request._id}`}>
+                        Write your response
+                      </label>
+
+                      <textarea
+                        id={`reply-${request._id}`}
+                        value={replies[request._id] || ""}
+                        onChange={(event) =>
+                          updateReply(
+                            request._id,
+                            event.target.value
+                          )
+                        }
+                        placeholder="Write an optional message to the volunteer..."
+                        rows={4}
+                        disabled={isUpdating}
+                      />
+
+                      <p className="vr_reply_hint">
+                        Your message will be sent along with your decision.
+                      </p>
+
+                      <div className="vr_buttons">
+                        <button
+                          type="button"
+                          className="vr_accept"
+                          onClick={() =>
+                            handleDecision(request._id, "accepted")
+                          }
+                          disabled={isUpdating}
+                        >
+                          <Check size={16} />
+                          {isUpdating ? "Saving..." : "Accept"}
+                        </button>
+
+                        <button
+                          type="button"
+                          className="vr_reject"
+                          onClick={() =>
+                            handleDecision(request._id, "rejected")
+                          }
+                          disabled={isUpdating}
+                        >
+                          <X size={16} />
+                          {isUpdating ? "Saving..." : "Reject"}
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="vr_final_response">
+                      <h4>
+                        <MessageSquare size={16} />
+                        Your Response
+                      </h4>
+
+                      {responseMessage ? (
+                        <>
+                          <p>{responseMessage}</p>
+                          {request.ngoResponse?.sentAt && (
+                            <small>
+                              Sent {formatDateTime(
+                                request.ngoResponse.sentAt
+                              )}
+                            </small>
+                          )}
+                        </>
+                      ) : null}
+                    </div>
+                  )}
                 </div>
-
-                <label htmlFor={`reply-${request.id}`}>
-                  Write a reply to {request.name}
-                </label>
-
-                <textarea
-                  id={`reply-${request.id}`}
-                  value={replies[request.id] || ""}
-                  onChange={(event) =>
-                    updateReply(request.id, event.target.value)
-                  }
-                  placeholder="Write your message here..."
-                  rows={4}
-                />
-
-                <p className="vr_reply_hint">
-                  You can send a message independently, or include it
-                  with your acceptance or rejection.
-                </p>
-
-                <div className="vr_buttons">
-                  <button
-                    type="button"
-                    className="vr_accept"
-                    onClick={() => handleDecision(request, "accepted")}
-                    disabled={request.status !== "pending"}
-                  >
-                    <Check size={16} />
-                    Accept
-                    {replies[request.id]?.trim() ? " + Send" : ""}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="vr_reject"
-                    onClick={() => handleDecision(request, "rejected")}
-                    disabled={request.status !== "pending"}
-                  >
-                    <X size={16} />
-                    Reject
-                    {replies[request.id]?.trim() ? " + Send" : ""}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="vr_send_button"
-                    onClick={() => handleSendMessage(request)}
-                    disabled={!replies[request.id]?.trim()}
-                  >
-                    <Send size={15} />
-                    Send Message
-                  </button>
-                </div>
-              </div>
-            </article>
-          ))
+              </article>
+            );
+          })
         )}
       </section>
     </div>

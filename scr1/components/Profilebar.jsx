@@ -1,24 +1,64 @@
-import React from "react";
-import { LocateFixed, Bell } from "lucide-react";
+
+import React, { useEffect, useState } from "react";
+import { LocateFixed, Bell, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import profile from "../assets/care-share.png";
+import defaultProfile from "../assets/care-share.png";
 import "../styles/Profilebar.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const Profilebar = ({
-  name = "Volunteer",
-  location = "Location not set",
+  name: initialName = "Volunteer",
+  location: initialLocation = "Location not set",
+  profileImage: initialImage = "",
 }) => {
   const navigate = useNavigate();
+
+  const [name, setName] = useState(initialName);
+  const [location, setLocation] = useState(initialLocation);
+  const [profileImage, setProfileImage] = useState(initialImage);
+
+  useEffect(() => {
+    const fetchVolunteerProfile = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${API_URL}/api/volunteers/profile`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.ok && data.profile) {
+          setName(data.profile.fullName || initialName);
+          setLocation(data.profile.location || initialLocation);
+          setProfileImage(data.profile.profileImageUrl || initialImage);
+        }
+      } catch (error) {
+        console.error("Unable to load volunteer profile:", error);
+      }
+    };
+
+    fetchVolunteerProfile();
+  }, []);
 
   return (
     <div className="profile_bar">
       <div className="profile_location">
         <LocateFixed size={18} />
-
-        <span>
-          {location}
-        </span>
+        <span>{location}</span>
       </div>
 
       <div className="profile_bar_right">
@@ -31,15 +71,25 @@ const Profilebar = ({
           <Bell size={21} />
         </button>
 
-        <img
-          className="profile_image"
-          src={profile}
-          alt="profile"
-        />
+        <div className="profile_image_container">
+          {profileImage ? (
+            <img
+              className="profile_image"
+              src={profileImage}
+              alt={`${name}'s profile`}
+            />
+          ) : defaultProfile ? (
+            <img
+              className="profile_image"
+              src={defaultProfile}
+              alt="Default profile"
+            />
+          ) : (
+            <User size={24} />
+          )}
+        </div>
 
-        <span className="profile_name">
-          {name}
-        </span>
+        <span className="profile_name">{name}</span>
       </div>
     </div>
   );

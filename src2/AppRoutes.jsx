@@ -1,23 +1,17 @@
 
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   Routes,
   Route,
   useNavigate,
   useParams,
+  Navigate,
 } from "react-router-dom";
 
-// =================================
-// HOMEPAGE AND AUTH IMPORTS
-// =================================
+import ProtectedRoute from "./ProtectedRoute";
 
 import Home from "../src/pages/Home.jsx";
 import AuthForm from "../src/components/Login_card.jsx";
-
-// =================================
-// VOLUNTEER IMPORTS
-// =================================
 
 import VolunteerDashboard from "../scr1/VolunteerDashboard.jsx";
 import NearbyNgoPage from "../scr1/pages/NearbyNgoPage.jsx";
@@ -29,67 +23,260 @@ import NgoProfilePublicVol from "./pages/NgoProfilePublicVol.jsx";
 
 import MyExperience from "../src3/pages/MyExperience.jsx";
 import SavedNgos from "../src3/pages/SavedNgos.jsx";
-import RequestToVolunteer from "../src3/pages/RequestToVolunteer.jsx";
-
+import RequestToVolunteer from "../src3/pages/RequesttoVolunteer.jsx";
 import VolunteerRequests from "../src3/pages/VolunteerRequests.jsx";
 import VolunteerRequestView from "../src3/pages/VolunteerRequestView.jsx";
 import Notifications from "../src3/pages/Notifications.jsx";
-
-// =================================
-// NGO IMPORTS
-// =================================
 
 import NgoDashboard from "../src4/pages/NgoDashboard.jsx";
 import NgoProfile from "../src4/pages/NgoProfile.jsx";
 import NgoProfileform from "../src4/pages/NgoProfileform.jsx";
 import NgoProfilePublicNgo from "../src4/pages/NgoProfilePublicNgo.jsx";
-
 import NgoVolunteerRequests from "../src4/pages/VolunteerRequests.jsx";
-
-// =================================
-// CONSTANTS
-// =================================
 
 import { volunteerProfileData } from "./constants/volunteerProfileData.js";
 import { nearbyNgos } from "../scr1/constants/ngoConstants.js";
 
-// =================================
-// PUBLIC NGO PROFILE
-// =================================
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+const HomeRoute = ({ openAuth }) => {
+  const token = localStorage.getItem("token");
+
+  let user = null;
+
+  try {
+    user = JSON.parse(localStorage.getItem("user"));
+  } catch {
+    user = null;
+  }
+
+  if (token && user?.role === "volunteer") {
+    return <Navigate to="/volunteer-dashboard" replace />;
+  }
+
+  if (token && user?.role === "ngo") {
+    return <Navigate to="/ngo-dashboard" replace />;
+  }
+
+  return <Home onAuthClick={openAuth} />;
+};
 
 const NgoProfileRoute = () => {
   const { id } = useParams();
+  const [ngo, setNgo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const ngo = nearbyNgos.find(
-    (item) => String(item.id) === String(id)
-  );
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchNgo = async () => {
+      setLoading(true);
+      setError("");
+      setNgo(null);
+
+      const staticNgo = nearbyNgos.find(
+        (item) => String(item.id) === String(id)
+      );
+
+      if (staticNgo) {
+        if (isMounted) {
+          setNgo(staticNgo);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+        if (isMounted) {
+          setError("NGO profile not found.");
+          setLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/api/ngos/${id}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Unable to load NGO profile.");
+        }
+
+        if (isMounted) {
+          setNgo({
+            ...data.ngo,
+            id: data.ngo._id,
+            logo: data.ngo.logoUrl || data.ngo.logo || "",
+            description:
+              data.ngo.description || data.ngo.mission || "",
+          });
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err.message || "Unable to load NGO profile.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchNgo();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  if (loading) {
+    return <p>Loading organization profile...</p>;
+  }
+
+  if (error || !ngo) {
+    return (
+      <div>
+        <p role="alert">{error || "NGO profile not found."}</p>
+        <button
+          type="button"
+          onClick={() => window.location.assign("/browse-ngos")}
+        >
+          Back to Browse NGOs
+        </button>
+      </div>
+    );
+  }
 
   return <NgoProfilePublicVol ngo={ngo} />;
 };
 
-// =================================
-// NGO PROFILE PREVIEW
-// =================================
-
 const NgoProfileviewRoute = () => {
-  const { id } = useParams();
+  const [ngo, setNgo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const ngo = nearbyNgos.find(
-    (item) => String(item.id) === String(id)
-  );
+  useEffect(() => {
+    const fetchNgoProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          throw new Error("Please log in again.");
+        }
+
+        const response = await fetch(`${API_URL}/api/ngos/profile`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Unable to load NGO profile.");
+        }
+
+        setNgo({
+          ...data.profile,
+          id: data.profile._id,
+          logo: data.profile.logoUrl || data.profile.logo || "",
+        });
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNgoProfile();
+  }, []);
+
+  if (loading) {
+    return <p>Loading your public profile...</p>;
+  }
+
+  if (error) {
+    return <p role="alert">{error}</p>;
+  }
+
+  if (!ngo) {
+    return <p>NGO profile not found.</p>;
+  }
 
   return <NgoProfilePublicNgo ngo={ngo} />;
 };
 
-// =================================
-// APP ROUTES
-// =================================
+const NgoProfileEditRoute = ({ onSave }) => {
+  const [ngoProfile, setNgoProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchNgoProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          throw new Error("Please log in again.");
+        }
+
+        const response = await fetch(`${API_URL}/api/ngos/profile`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.status === 404) {
+          setNgoProfile(null);
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(data.message || "Unable to load NGO profile.");
+        }
+
+        setNgoProfile(data.profile);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNgoProfile();
+  }, []);
+
+  if (loading) {
+    return <p>Loading NGO profile...</p>;
+  }
+
+  if (error) {
+    return <p role="alert">{error}</p>;
+  }
+
+  if (!ngoProfile) {
+    return <Navigate to="/ngo/profile/setup" replace />;
+  }
+
+  return (
+    <NgoProfileform
+      initialNgoData={ngoProfile}
+      onSave={onSave}
+    />
+  );
+};
 
 const AppRoutes = () => {
   const navigate = useNavigate();
 
-  // AUTH POPUP STATE
   const [authType, setAuthType] = useState(null);
+  const [profileData, setProfileData] = useState(volunteerProfileData);
+  const [ngoData, setNgoData] = useState(null);
 
   const openAuth = (type) => {
     setAuthType(type);
@@ -99,244 +286,264 @@ const AppRoutes = () => {
     setAuthType(null);
   };
 
-  // =================================
-  // VOLUNTEER PROFILE STATE
-  // =================================
+  const handleProfileSave = async (updatedProfile) => {
+    const token = localStorage.getItem("token");
 
-  const [profileData, setProfileData] = useState(
-    volunteerProfileData
-  );
+    if (!token) {
+      throw new Error(
+        "Please log in again before saving your profile."
+      );
+    }
 
-  const handleProfileSave = (updatedProfile) => {
-    setProfileData(updatedProfile);
-    navigate("/volunteer-profile");
+    const response = await fetch(`${API_URL}/api/volunteers/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedProfile),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.message || "Unable to save volunteer profile."
+      );
+    }
+
+    setProfileData(data.profile);
+
+    navigate("/volunteer-dashboard", {
+      replace: true,
+    });
   };
 
-  // =================================
-  // NGO PROFILE STATE
-  // =================================
+  const handleNgoProfileSave = async (updatedNgoData) => {
+    const token = localStorage.getItem("token");
 
-  const [ngoData, setNgoData] = useState({
-    id: 1,
-    organizationName: "Helping Hands Foundation",
-    contactPersonName: "Priya Sharma",
-    contactPersonRole: "Founder & Director",
-    contactEmail: "helpinghands@example.com",
-    contactPhone: "+91 98765 43210",
-    location: "Delhi",
-    website: "www.helpinghands.org",
-    socialLink: "@helpinghands",
-    foundedYear: "2015",
-    organizationSize: "11-50",
-    logo: null,
+    if (!token) {
+      throw new Error(
+        "Please log in again before saving your profile."
+      );
+    }
 
-    mission:
-      "To create equal opportunities for children and communities through education, support, and meaningful community programs.",
+    const { id, ...ngoPayload } = updatedNgoData;
 
-    description:
-      "Supporting children's education and providing learning resources to underserved communities.",
+    const response = await fetch(`${API_URL}/api/ngos/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(ngoPayload),
+    });
 
-    programs:
-      "Educational workshops, learning resource distribution, community development programs, and mentorship.",
+    const data = await response.json();
 
-    volunteerHelp:
-      "Volunteers can help with teaching, mentoring, event organization, communication, and community activities.",
+    if (!response.ok) {
+      throw new Error(
+        data.message || "Unable to save NGO profile."
+      );
+    }
 
-    currentNeeds:
-      "Teaching volunteers, educational materials, community outreach support, and event volunteers.",
+    setNgoData(data.profile);
 
-    causes: [
-      "Education",
-      "Child Welfare",
-      "Animal Welfare",
-      "Community Service",
-    ],
-  });
-
-  const handleNgoProfileSave = (updatedNgoData) => {
-    setNgoData(updatedNgoData);
-    navigate("/ngo/profile");
+    navigate("/ngo-dashboard", {
+      replace: true,
+    });
   };
-
-  // =================================
-  // ROUTES
-  // =================================
 
   return (
     <>
       <Routes>
-
-        {/* =================================
-            MAIN HOMEPAGE
-        ================================= */}
-
         <Route
           path="/"
-          element={<Home onAuthClick={openAuth} />}
+          element={<HomeRoute openAuth={openAuth} />}
         />
-
-        {/* =================================
-            VOLUNTEER DASHBOARD
-        ================================= */}
 
         <Route
           path="/volunteer-dashboard"
-          element={<VolunteerDashboard />}
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <VolunteerDashboard />
+            </ProtectedRoute>
+          }
         />
-
-        {/* =================================
-            NGO DISCOVERY
-        ================================= */}
 
         <Route
           path="/nearby-ngos"
-          element={<NearbyNgoPage />}
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <NearbyNgoPage />
+            </ProtectedRoute>
+          }
         />
 
         <Route
           path="/browse-ngos"
-          element={<BrowseAllNgos />}
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <BrowseAllNgos />
+            </ProtectedRoute>
+          }
         />
 
-        {/* =================================
-            VOLUNTEER PROFILE
-        ================================= */}
+        <Route
+          path="/volunteer-profile/setup"
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <VolunteerForm
+                initialProfile={null}
+                onSave={handleProfileSave}
+              />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/volunteer-profile"
           element={
-            <VolunteerProfile profileData={profileData} />
+            <ProtectedRoute allowedRole="volunteer">
+              <VolunteerProfile profileData={profileData} />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/volunteer-profile/edit"
           element={
-            <VolunteerForm
-              initialProfile={profileData}
-              onSave={handleProfileSave}
-            />
+            <ProtectedRoute allowedRole="volunteer">
+              <VolunteerForm
+                initialProfile={profileData}
+                onSave={handleProfileSave}
+              />
+            </ProtectedRoute>
           }
         />
 
-        {/* =================================
-            PUBLIC NGO PROFILE
-        ================================= */}
-
         <Route
           path="/ngo/:id"
-          element={<NgoProfileRoute />}
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <NgoProfileRoute />
+            </ProtectedRoute>
+          }
         />
-
-        {/* =================================
-            VOLUNTEER EXPERIENCE
-        ================================= */}
 
         <Route
           path="/volunteer/experience"
-          element={<MyExperience />}
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <MyExperience />
+            </ProtectedRoute>
+          }
         />
-
-        {/* =================================
-            VOLUNTEER REQUESTS
-        ================================= */}
 
         <Route
           path="/volunteer/requests"
           element={
-            <VolunteerRequests profileData={profileData} />
+            <ProtectedRoute allowedRole="volunteer">
+              <VolunteerRequests profileData={profileData} />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/volunteer/request/view/:requestId"
-          element={<VolunteerRequestView />}
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <VolunteerRequestView />
+            </ProtectedRoute>
+          }
         />
-
-        {/* =================================
-            VOLUNTEER NOTIFICATIONS
-        ================================= */}
 
         <Route
           path="/volunteer/notifications"
-          element={<Notifications />}
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <Notifications />
+            </ProtectedRoute>
+          }
         />
-
-        {/* =================================
-            SAVED NGOS
-        ================================= */}
 
         <Route
           path="/volunteer/saved-ngo"
-          element={<SavedNgos />}
+          element={
+            <ProtectedRoute allowedRole="volunteer">
+              <SavedNgos />
+            </ProtectedRoute>
+          }
         />
-
-        {/* =================================
-            REQUEST TO VOLUNTEER
-        ================================= */}
 
         <Route
           path="/volunteer/request/:ngoId"
           element={
-            <RequestToVolunteer profileData={profileData} />
+            <ProtectedRoute allowedRole="volunteer">
+              <RequestToVolunteer profileData={profileData} />
+            </ProtectedRoute>
           }
         />
 
-        {/* =================================
-            NGO DASHBOARD
-        ================================= */}
-
         <Route
           path="/ngo-dashboard"
-          element={<NgoDashboard ngoData={ngoData} />}
+          element={
+            <ProtectedRoute allowedRole="ngo">
+              <NgoDashboard ngoData={ngoData} />
+            </ProtectedRoute>
+          }
         />
-
-        {/* =================================
-            NGO PROFILE
-        ================================= */}
 
         <Route
           path="/ngo/profile"
-          element={<NgoProfile ngoData={ngoData} />}
+          element={
+            <ProtectedRoute allowedRole="ngo">
+              <NgoProfile ngoData={ngoData} />
+            </ProtectedRoute>
+          }
         />
 
-        {/* =================================
-            NGO PROFILE EDIT
-        ================================= */}
+        <Route
+          path="/ngo/profile/setup"
+          element={
+            <ProtectedRoute allowedRole="ngo">
+              <NgoProfileform
+                initialNgoData={null}
+                onSave={handleNgoProfileSave}
+              />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/ngo/profile/edit"
           element={
-            <NgoProfileform
-              initialNgoData={ngoData}
-              onSave={handleNgoProfileSave}
-            />
+            <ProtectedRoute allowedRole="ngo">
+              <NgoProfileEditRoute
+                onSave={handleNgoProfileSave}
+              />
+            </ProtectedRoute>
           }
         />
 
-        {/* =================================
-            NGO PROFILE PREVIEW
-        ================================= */}
-
         <Route
           path="/ngo/:id/preview"
-          element={<NgoProfileviewRoute />}
+          element={
+            <ProtectedRoute allowedRole="ngo">
+              <NgoProfileviewRoute />
+            </ProtectedRoute>
+          }
         />
-
-        {/* =================================
-            NGO RECEIVED VOLUNTEER REQUESTS
-        ================================= */}
 
         <Route
           path="/ngo/requests"
-          element={<NgoVolunteerRequests />}
+          element={
+            <ProtectedRoute allowedRole="ngo">
+              <NgoVolunteerRequests />
+            </ProtectedRoute>
+          }
         />
-
       </Routes>
-
-      {/* =================================
-          LOGIN / SIGNUP POPUP
-      ================================= */}
 
       {authType && (
         <div
@@ -355,7 +562,10 @@ const AppRoutes = () => {
               ×
             </button>
 
-            <AuthForm type={authType} />
+            <AuthForm
+              type={authType}
+              onSuccess={closeAuth}
+            />
           </div>
         </div>
       )}

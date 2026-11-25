@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Heart,
@@ -20,19 +21,22 @@ const SavedNgos = () => {
   const [savedNgos, setSavedNgos] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  /*
-   * Load saved NGOs when the page opens.
-   *
-   * For now the saved NGO IDs are stored in localStorage.
-   * Later this can be replaced with a backend request.
-   */
-  useEffect(() => {
+  const loadSavedNgos = () => {
     try {
-      const savedIds =
-        JSON.parse(localStorage.getItem("savedNgos")) || [];
+      const storedData = JSON.parse(
+        localStorage.getItem("savedNgos") || "[]"
+      );
+
+      const savedIds = storedData.map((item) =>
+        String(
+          typeof item === "object" && item !== null
+            ? item.id
+            : item
+        )
+      );
 
       const savedOrganizations = nearbyNgos.filter((ngo) =>
-        savedIds.includes(ngo.id)
+        savedIds.includes(String(ngo.id))
       );
 
       setSavedNgos(savedOrganizations);
@@ -40,21 +44,33 @@ const SavedNgos = () => {
       console.error("Unable to load saved NGOs:", error);
       setSavedNgos([]);
     }
+  };
+
+  useEffect(() => {
+    loadSavedNgos();
+
+    const handleStorageChange = () => {
+      loadSavedNgos();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    window.addEventListener("focus", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("focus", handleStorageChange);
+    };
   }, []);
 
-  /*
-   * Remove NGO from saved list.
-   */
   const handleRemove = (ngoId) => {
     const updatedNgos = savedNgos.filter(
-      (ngo) => ngo.id !== ngoId
+      (ngo) => String(ngo.id) !== String(ngoId)
     );
 
     setSavedNgos(updatedNgos);
 
-    const updatedIds = updatedNgos.map(
-      (ngo) => ngo.id
-    );
+    const updatedIds = updatedNgos.map((ngo) => ngo.id);
 
     localStorage.setItem(
       "savedNgos",
@@ -62,59 +78,37 @@ const SavedNgos = () => {
     );
   };
 
-  /*
-   * Open the selected NGO profile.
-   */
   const handleViewProfile = (ngo) => {
-    navigate(
-      `/volunteer/ngo-profile/${ngo.id}`,
-      {
-        state: {
-          ngo,
-        },
-      }
-    );
+    navigate(`/ngo/${ngo.id}`, {
+      state: {
+        ngo,
+      },
+    });
   };
 
-  /*
-   * Search saved NGOs.
-   */
   const filteredNgos = savedNgos.filter((ngo) =>
-    ngo.organizationName
+    (ngo.organizationName || "")
       .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+      .includes(searchTerm.toLowerCase().trim())
   );
 
   return (
     <div className="saved_ngos_layout">
-
       <VolunteerSidebar />
 
       <main className="saved_ngos_main">
-
         <Profilebar />
 
         <div className="saved_ngos_page">
-
-          {/* PAGE HEADER */}
-
           <div className="saved_ngos_heading">
-
             <div>
-              <h1>
-                Saved NGOs
-              </h1>
-
+              <h1>Saved NGOs</h1>
               <p>
-                Organizations you have saved
-                and want to support.
+                Organizations you have saved and want to support.
               </p>
             </div>
 
-            {/* SEARCH */}
-
             <div className="saved_ngos_search">
-
               <Search size={18} />
 
               <input
@@ -125,165 +119,97 @@ const SavedNgos = () => {
                   setSearchTerm(event.target.value)
                 }
               />
-
             </div>
-
           </div>
-
-          {/* COUNT */}
 
           <div className="saved_ngos_count">
-
             {savedNgos.length}{" "}
-            {savedNgos.length === 1
-              ? "NGO"
-              : "NGOs"}{" "}
-            saved
-
+            {savedNgos.length === 1 ? "NGO" : "NGOs"} saved
           </div>
 
-
-          {/* SAVED NGO LIST */}
-
           {filteredNgos.length > 0 ? (
-
             <div className="saved_ngos_list">
-
               {filteredNgos.map((ngo) => (
-
                 <div
                   className="saved_ngo_card"
                   key={ngo.id}
                 >
-
-                  {/* LOGO */}
-
                   <div className="saved_ngo_logo">
-
                     {ngo.logo ? (
-
                       <img
                         src={ngo.logo}
                         alt={`${ngo.organizationName} logo`}
                       />
-
                     ) : (
-
                       <div className="saved_ngo_logo_placeholder">
-
                         {ngo.organizationName
                           ?.charAt(0)
                           .toUpperCase() || "N"}
-
                       </div>
-
                     )}
-
                   </div>
 
-
-                  {/* INFORMATION */}
-
                   <div className="saved_ngo_information">
-
-                    <h2>
-                      {ngo.organizationName}
-                    </h2>
+                    <h2>{ngo.organizationName}</h2>
 
                     <div className="saved_ngo_location">
-
                       <MapPin size={16} />
 
                       <span>
-                        {ngo.location}
+                        {ngo.location || "Location not provided"}
                       </span>
 
                       {ngo.distance !== undefined &&
                         ngo.distance !== null && (
-
                           <span>
                             • {ngo.distance} km away
                           </span>
-
                         )}
-
                     </div>
 
-                    <p>
-                      {ngo.description}
-                    </p>
+                    <p>{ngo.description}</p>
 
                     <div className="saved_ngo_causes">
-
-                      {(ngo.causes || []).map(
-                        (cause) => (
-
-                          <span
-                            key={cause}
-                            className="saved_ngo_cause"
-                          >
-                            {cause}
-                          </span>
-
-                        )
-                      )}
-
+                      {(ngo.causes || []).map((cause) => (
+                        <span
+                          key={cause}
+                          className="saved_ngo_cause"
+                        >
+                          {cause}
+                        </span>
+                      ))}
                     </div>
-
                   </div>
 
-
-                  {/* ACTIONS */}
-
                   <div className="saved_ngo_actions">
-
                     <button
                       type="button"
                       className="saved_ngo_button"
-                      onClick={() =>
-                        handleRemove(ngo.id)
-                      }
+                      onClick={() => handleRemove(ngo.id)}
                     >
-
                       <Heart
                         size={18}
                         fill="red"
                         color="red"
                       />
-
                       Saved
-
                     </button>
-
 
                     <button
                       type="button"
                       className="saved_ngo_view_button"
-                      onClick={() =>
-                        handleViewProfile(ngo)
-                      }
+                      onClick={() => handleViewProfile(ngo)}
                     >
                       View Profile
                     </button>
-
                   </div>
-
                 </div>
-
               ))}
-
             </div>
-
           ) : (
-
-            /* EMPTY STATE */
-
             <div className="saved_ngo_empty">
-
               <div className="saved_empty_icon">
-
                 <Heart size={30} />
-
               </div>
 
               <h2>
@@ -301,64 +227,40 @@ const SavedNgos = () => {
               {!searchTerm && (
                 <button
                   type="button"
-                  onClick={() =>
-                    navigate("/browse-ngos")
-                  }
+                  onClick={() => navigate("/browse-ngos")}
                 >
                   Discover NGOs
                 </button>
               )}
-
             </div>
-
           )}
 
-
-          {/* EXPLORE MORE CARD */}
-
           <div className="saved_explore_card">
-
             <div className="saved_explore_icon">
-
               <Heart size={20} />
-
             </div>
 
             <div className="saved_explore_content">
-
-              <h3>
-                Want to explore more?
-              </h3>
+              <h3>Want to explore more?</h3>
 
               <p>
-                Discover more amazing organizations
-                and make a greater impact.
+                Discover more amazing organizations and make a
+                greater impact.
               </p>
-
             </div>
 
             <button
               type="button"
               className="saved_explore_button"
-              onClick={() =>
-                navigate("/browse-ngos")
-              }
+              onClick={() => navigate("/browse-ngos")}
             >
-
               <Search size={16} />
-
               Discover NGOs
-
               <ArrowRight size={16} />
-
             </button>
-
           </div>
-
         </div>
-
       </main>
-
     </div>
   );
 };

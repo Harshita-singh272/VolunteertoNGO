@@ -7,11 +7,10 @@ import "../styles/Login_card.css";
 import loginImage from "../assets/backg.jpg";
 import loginsticker from "../assets/sticker.png";
 
-// Backend URL
 const API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-const AuthForm = ({ type }) => {
+const AuthForm = ({ type, onSuccess }) => {
   const navigate = useNavigate();
 
   const isLogin = type === "login";
@@ -27,7 +26,6 @@ const AuthForm = ({ type }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // HANDLE INPUT CHANGES
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -39,87 +37,75 @@ const AuthForm = ({ type }) => {
     setError("");
   };
 
-  // REDIRECT ACCORDING TO USER ROLE
-  const redirectUser = (role) => {
-    if (role === "volunteer") {
-      navigate("/volunteer-dashboard");
-    } else if (role === "ngo") {
-      navigate("/ngo-dashboard");
-    } else {
-      setError("Invalid account role received from server.");
-    }
-  };
-
-  // HANDLE LOGIN AND SIGNUP
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     setError("");
+
+    if (loading) return;
+
+    if (!formData.email.trim()) {
+      setError("Please enter your email address.");
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(formData.email.trim())) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!isLogin) {
+      if (formData.password !== formData.confirmPassword) {
+        setError("Passwords do not match.");
+        return;
+      }
+
+      if (formData.password.length < 8) {
+        setError("Password must contain at least 8 characters.");
+        return;
+      }
+
+      if (!formData.role) {
+        setError("Please select your account role.");
+        return;
+      }
+
+      if (!formData.username.trim()) {
+        setError("Please enter your username.");
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
-      let endpoint;
-      let requestData;
+      const endpoint = isLogin
+        ? "/api/auth/login"
+        : "/api/auth/signup";
 
-      // =================================
-      // LOGIN
-      // =================================
-
-      if (isLogin) {
-        endpoint = "/api/auth/login";
-
-        requestData = {
-          email: formData.email.trim(),
-          password: formData.password,
-        };
-      }
-
-      // =================================
-      // SIGNUP
-      // =================================
-
-      else {
-        if (formData.password !== formData.confirmPassword) {
-          setError("Passwords do not match.");
-          setLoading(false);
-          return;
-        }
-
-        if (!formData.role) {
-          setError("Please select your account role.");
-          setLoading(false);
-          return;
-        }
-
-        requestData = {
-          role: formData.role,
-          username: formData.username.trim(),
-          email: formData.email.trim(),
-          password: formData.password,
-        };
-
-        endpoint = "/api/auth/signup";
-      }
-
-      // =================================
-      // SEND REQUEST TO BACKEND
-      // =================================
+      const requestData = isLogin
+        ? {
+            email: formData.email.trim(),
+            password: formData.password,
+          }
+        : {
+            role: formData.role,
+            username: formData.username.trim(),
+            email: formData.email.trim(),
+            password: formData.password,
+          };
 
       const response = await fetch(`${API_URL}${endpoint}`, {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify(requestData),
       });
 
       const data = await response.json();
-
-      // =================================
-      // HANDLE BACKEND ERRORS
-      // =================================
 
       if (!response.ok) {
         throw new Error(
@@ -127,36 +113,43 @@ const AuthForm = ({ type }) => {
         );
       }
 
-      // =================================
-      // GET USER INFORMATION
-      // =================================
-
-      const user = data.user || data;
-
-      const role = user.role?.toLowerCase();
-
-      if (role !== "volunteer" && role !== "ngo") {
+      if (!data.token || !data.user) {
         throw new Error(
-          "The server did not return a valid user role."
+          "Authentication information was not received from the server."
         );
       }
 
-      // =================================
-      // SAVE AUTHENTICATION INFORMATION
-      // =================================
+      const user = data.user;
+      const role = user.role?.toLowerCase();
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
+      if (role !== "volunteer" && role !== "ngo") {
+        throw new Error("Invalid user role received from server.");
       }
 
+      localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // =================================
-      // REDIRECT USER
-      // =================================
+      if (!isLogin) {
+        const profileRoute =
+          role === "volunteer"
+            ? "/volunteer-profile/setup"
+            : "/ngo/profile/setup";
 
-      redirectUser(role);
+        window.location.replace(profileRoute);
 
+        return;
+      }
+
+      const dashboardRoute =
+        role === "volunteer"
+          ? "/volunteer-dashboard"
+          : "/ngo-dashboard";
+
+      navigate(dashboardRoute, {
+        replace: true,
+      });
+
+      onSuccess?.();
     } catch (error) {
       console.error("Authentication error:", error);
 
@@ -180,7 +173,6 @@ const AuthForm = ({ type }) => {
       </h1>
 
       <div className="login_content">
-
         <img
           src={loginsticker}
           alt="Login"
@@ -188,7 +180,6 @@ const AuthForm = ({ type }) => {
         />
 
         <div className="login_block">
-
           <h2>
             {isLogin ? "Login" : "Sign Up"}
           </h2>
@@ -197,15 +188,12 @@ const AuthForm = ({ type }) => {
             className="login_input"
             onSubmit={handleSubmit}
           >
-
-            {/* SIGNUP ROLE */}
             {!isLogin && (
               <>
                 <div>
                   <label htmlFor="role">
                     Sign up as:
                   </label>
-
                   <br />
 
                   <select
@@ -231,12 +219,10 @@ const AuthForm = ({ type }) => {
 
                 <br />
 
-                {/* USERNAME */}
                 <div>
                   <label htmlFor="username">
                     Username:
                   </label>
-
                   <br />
 
                   <input
@@ -247,6 +233,7 @@ const AuthForm = ({ type }) => {
                     onChange={handleChange}
                     placeholder="Enter your username"
                     required
+                    autoComplete="username"
                   />
                 </div>
 
@@ -254,12 +241,10 @@ const AuthForm = ({ type }) => {
               </>
             )}
 
-            {/* EMAIL */}
             <div>
               <label htmlFor="email">
                 Email:
               </label>
-
               <br />
 
               <input
@@ -267,20 +252,34 @@ const AuthForm = ({ type }) => {
                 name="email"
                 type="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={(event) => {
+                  handleChange(event);
+
+                  event.target.setCustomValidity(
+                    event.target.validity.typeMismatch
+                      ? "Please enter a valid email address."
+                      : ""
+                  );
+                }}
+                onInvalid={(event) => {
+                  event.target.setCustomValidity(
+                    event.target.validity.typeMismatch
+                      ? "Please enter a valid email address."
+                      : "Please enter your email address."
+                  );
+                }}
                 placeholder="Enter your email"
                 required
+                autoComplete="email"
               />
             </div>
 
             <br />
 
-            {/* PASSWORD */}
             <div>
               <label htmlFor="password">
                 Password:
               </label>
-
               <br />
 
               <input
@@ -291,10 +290,12 @@ const AuthForm = ({ type }) => {
                 onChange={handleChange}
                 placeholder="Enter your password"
                 required
+                autoComplete={
+                  isLogin ? "current-password" : "new-password"
+                }
               />
             </div>
 
-            {/* CONFIRM PASSWORD */}
             {!isLogin && (
               <>
                 <br />
@@ -303,7 +304,6 @@ const AuthForm = ({ type }) => {
                   <label htmlFor="confirmPassword">
                     Confirm Password:
                   </label>
-
                   <br />
 
                   <input
@@ -314,12 +314,12 @@ const AuthForm = ({ type }) => {
                     onChange={handleChange}
                     placeholder="Confirm your password"
                     required
+                    autoComplete="new-password"
                   />
                 </div>
               </>
             )}
 
-            {/* ERROR MESSAGE */}
             {error && (
               <p
                 className="auth_error"
@@ -331,7 +331,6 @@ const AuthForm = ({ type }) => {
 
             <br />
 
-            {/* SUBMIT BUTTON */}
             <button
               type="submit"
               disabled={loading}
@@ -342,7 +341,6 @@ const AuthForm = ({ type }) => {
                   ? "Login"
                   : "Sign Up"}
             </button>
-
           </form>
         </div>
       </div>
